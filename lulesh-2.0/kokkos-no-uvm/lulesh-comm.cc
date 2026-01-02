@@ -59,7 +59,7 @@
 void CommRecv(Domain& domain, int msgType, Index_t xferFields,
               Index_t dx, Index_t dy, Index_t dz, bool doRecv, bool planeOnly) {
 
-   printf("Entering CommRecv\n") ;
+   // printf("Entering CommRecv\n") ;
 
    if (domain.numRanks() == 1)
       return ;
@@ -325,8 +325,8 @@ void CommRecv(Domain& domain, int msgType, Index_t xferFields,
       }
    }
 
-   printf("Posted CommRecv (%d plane, %d edge, %d corner messages)\n",
-          pmsg, emsg, cmsg) ;
+   // printf("Posted CommRecv (%d plane, %d edge, %d corner messages)\n",
+   //       pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
@@ -395,7 +395,7 @@ void CommSend(Domain& domain, int msgType,
               Index_t dx, Index_t dy, Index_t dz, bool doSend, bool planeOnly)
 {
 
-   printf("CommSend called\n");
+   // printf("CommSend called\n");
 
    if (domain.numRanks() == 1)
       return ;
@@ -452,7 +452,7 @@ void CommSend(Domain& domain, int msgType,
             //destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
-         printf("Send call 0\n");
+         // printf("Send call 0\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm, 
                    xferFields*sendCount, baseType,
                    myRank - domain.tp()*domain.tp(), msgType,
@@ -467,7 +467,7 @@ void CommSend(Domain& domain, int msgType,
             //destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
-         printf("Send call 1\n");
+         // printf("Send call 1\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm, 
                    xferFields*sendCount, baseType,
                    myRank + domain.tp()*domain.tp(), msgType,
@@ -496,7 +496,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
-         printf("Send call 2\n");
+         // printf("Send call 2\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm, 
                    xferFields*sendCount, baseType,
                    myRank - domain.tp(), msgType,
@@ -520,7 +520,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
-         printf("Send call 3\n");
+         // printf("Send call 3\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm, 
                    xferFields*sendCount, baseType,
                    myRank + domain.tp(), msgType,
@@ -549,7 +549,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
-         printf("Send call 4\n");
+         // printf("Send call 4\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm, 
                    xferFields*sendCount, baseType,
                    myRank - 1, msgType,
@@ -573,7 +573,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
-         printf("Send call 5\n");
+         // printf("Send call 5\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm, 
                    xferFields*sendCount, baseType,
                    myRank + 1, msgType,
@@ -597,7 +597,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dz ;
          }
          //destAddr -= xferFields*dz ;
-         printf("Send call 6\n");
+         // printf("Send call 6\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dz, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -618,7 +618,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dx ;
          }
          // destAddr -= xferFields*dx ;
-         printf("Send call 7\n");
+         // printf("Send call 7\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dx, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -639,7 +639,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dy ;
          }
          // destAddr -= xferFields*dy ;
-         printf("Send call 8\n");
+         // printf("Send call 8\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dy, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -660,7 +660,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dz ;
          }
          // destAddr -= xferFields*dz ;
-         printf("Send call 9\n");
+         // printf("Send call 9\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dz, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -681,7 +681,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dx ;
          }
          // destAddr -= xferFields*dx ;
-         printf("Send call 10\n");
+         // printf("Send call 10\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dx, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -702,7 +702,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dy ;
          }
          // destAddr -= xferFields*dy ;
-         printf("Send call 11\n");
+         // printf("Send call 11\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dy, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -723,7 +723,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dz ;
          }
          // destAddr -= xferFields*dz ;
-         printf("Send call 12\n");
+         // printf("Send call 12\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dz, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -744,7 +744,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dx ;
          }
          // destAddr -= xferFields*dx ;
-         printf("Send call 13\n");
+         // printf("Send call 13\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dx, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -765,7 +765,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dy ;
          }
          // destAddr -= xferFields*dy ;
-         printf("Send call 14\n");
+         // printf("Send call 14\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dy, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -786,7 +786,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dz ;
          }
          // destAddr -= xferFields*dz ;
-         printf("Send call 15\n");
+         // printf("Send call 15\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dz, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -807,7 +807,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dx ;
          }
          // destAddr -= xferFields*dx ;
-         printf("Send call 16\n");
+         // printf("Send call 16\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dx, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -828,7 +828,7 @@ void CommSend(Domain& domain, int msgType,
             // destAddr += dy ;
          }
          // destAddr -= xferFields*dy ;
-         printf("Send call 17\n");
+         // printf("Send call 17\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm, 
                    xferFields*dy, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg]) ;
@@ -847,7 +847,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(0) ;
          }
-         printf("Send call 18\n");
+         // printf("Send call 18\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -866,7 +866,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
-         printf("Send call 19\n");
+         // printf("Send call 19\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -885,7 +885,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
-         printf("Send call 20\n");
+         // printf("Send call 20\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -904,7 +904,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
-         printf("Send call 21\n");
+         // printf("Send call 21\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -923,7 +923,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
-         printf("Send call 22\n");
+         // printf("Send call 22\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -942,7 +942,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
-         printf("Send call 23\n");
+         // printf("Send call 23\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -961,7 +961,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
-         printf("Send call 24\n");
+         // printf("Send call 24\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -980,7 +980,7 @@ void CommSend(Domain& domain, int msgType,
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
-         printf("Send call 25\n");
+         // printf("Send call 25\n");
          MPI_Isend(domain.commDataSendView.data() + pmsg * maxPlaneComm +
                    emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL, xferFields, baseType, toRank, msgType,
                    MPI_COMM_WORLD, &domain.sendRequest[pmsg+emsg+cmsg]) ;
@@ -989,15 +989,15 @@ void CommSend(Domain& domain, int msgType,
    }
 
    MPI_Waitall(26, domain.sendRequest, status) ;
-   printf("Completed CommSend (%d plane, %d edge, %d corner messages)\n",
-          pmsg, emsg, cmsg) ;
+   // printf("Completed CommSend (%d plane, %d edge, %d corner messages)\n",
+   //       pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
 
 void CommSBN(Domain& domain, int xferFields, Kokkos::View<Real_t*> *fieldData) {
 
-   printf("Entering CommSBN\n") ;
+   // printf("Entering CommSBN\n") ;
 
    if (domain.numRanks() == 1)
       return ;
@@ -1501,15 +1501,15 @@ void CommSBN(Domain& domain, int xferFields, Kokkos::View<Real_t*> *fieldData) {
       ++cmsg ;
    }
 
-   printf("Completed CommSBN (%d plane, %d edge, %d corner messages)\n",
-          pmsg, emsg, cmsg) ;
+   // printf("Completed CommSBN (%d plane, %d edge, %d corner messages)\n",
+   //       pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
 
 void CommSyncPosVel(Domain& domain) {
 
-   printf("Entering CommSyncPosVel\n") ;
+   // printf("Entering CommSyncPosVel\n") ;
 
    if (domain.numRanks() == 1)
       return ;
@@ -2049,15 +2049,15 @@ void CommSyncPosVel(Domain& domain) {
       ++cmsg ;
    }
 
-   printf("Completed CommSyncPosVel (%d plane, %d edge, %d corner messages)\n",
-          pmsg, emsg, cmsg) ;
+   // printf("Completed CommSyncPosVel (%d plane, %d edge, %d corner messages)\n",
+   //       pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
 
 void CommMonoQ(Domain& domain)
 {
-   printf("Entering CommMonoQ\n") ;
+   // printf("Entering CommMonoQ\n") ;
    if (domain.numRanks() == 1)
       return ;
 
@@ -2232,8 +2232,8 @@ void CommMonoQ(Domain& domain)
       }
    }
 
-   printf("Completed CommMonoQ (%d plane messages)\n",
-          pmsg) ;
+   // printf("Completed CommMonoQ (%d plane messages)\n",
+   //       pmsg) ;
 }
 
 #endif
