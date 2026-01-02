@@ -335,6 +335,7 @@ void Copy1D(Domain &domain, Domain_member src, int src_offset,
                        KOKKOS_LAMBDA(const int i) {
       (domain.*dest)(dst_offset + i * dst_stride) = (domain.*src)(src_offset + i * src_stride);
    });
+   Kokkos::fence();
 }
 
 void Add1D(Domain &domain, Domain_member src, int src_offset, int src_stride,
@@ -345,6 +346,7 @@ void Add1D(Domain &domain, Domain_member src, int src_offset, int src_stride,
                        KOKKOS_LAMBDA(const int i) {
       (domain.*dest)(dst_offset + i * dst_stride) += (domain.*src)(src_offset + i * src_stride);
    });
+   Kokkos::fence();
 }
 
 /******************************************/
