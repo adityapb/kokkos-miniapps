@@ -1555,7 +1555,7 @@ static inline void CalcQForElems(Domain &domain) {
     fieldData[0] = domain.m_delv_xi;
     fieldData[1] = domain.m_delv_eta;
     fieldData[2] = domain.m_delv_zeta;
-    
+
     CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
              domain.sizeZ(), true, true);
 
@@ -2069,8 +2069,6 @@ int main(int argc, char *argv[]) {
   struct cmdLineOpts opts;
 
 #if USE_MPI
-   Kokkos::View<Real_t*> fieldData;
-
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
   MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
@@ -2119,6 +2117,7 @@ int main(int argc, char *argv[]) {
                 opts.balance, opts.cost);
 
 #if USE_MPI
+   Kokkos::View<Real_t*> fieldData;
   fieldData = locDom.m_nodalMass;
 
   // Initial domain boundary communication
