@@ -137,11 +137,6 @@ Domain::Domain(Int_t numRanks, Index_t colLoc,
 //   m_nodeElemCornerList(0),
    //m_regElemSize(0),
    //m_regElemlist(0)
-#if USE_MPI
-   ,
-   commDataSend(0),
-   commDataRecv(0)
-#endif
 {
 
    Index_t edgeElems = nx ;

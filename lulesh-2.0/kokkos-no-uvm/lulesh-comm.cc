@@ -268,7 +268,7 @@ void CommRecv(Domain& domain, int msgType, Index_t xferFields,
       if (rowMin && colMin && planeMax) {
          /* corner at domain logical coord (0, 0, 1) */
          int fromRank = myRank + domain.tp()*domain.tp() - domain.tp() - 1 ;
-         MPI_Irecv(domain.commDataRecvView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL
+         MPI_Irecv(domain.commDataRecvView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL,
                    xferFields, baseType, fromRank, msgType,
                    MPI_COMM_WORLD, &domain.recvRequest[pmsg+emsg+cmsg]) ;
          ++cmsg ;
@@ -439,7 +439,7 @@ void CommSend(Domain& domain, int msgType,
          //destAddr = &domain.commDataSend[pmsg * maxPlaneComm] ;
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
-            Copy1D(domain, src, 0, 1, Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount, 1, sendCount);
+            Copy1D(domain, src, 0, 1, &Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount, 1, sendCount);
             //destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
@@ -454,7 +454,7 @@ void CommSend(Domain& domain, int msgType,
          //destAddr = &domain.commDataSend[pmsg * maxPlaneComm] ;
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
-            Copy1D(domain, src, dx*dy*(dz - 1), 1, Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount, 1, sendCount);
+            Copy1D(domain, src, dx*dy*(dz - 1), 1, &Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount, 1, sendCount);
             //destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;
@@ -476,7 +476,7 @@ void CommSend(Domain& domain, int msgType,
             Domain_member src = fieldData[fi] ;
             Copy2D(domain, src, 0,
                1, dx*dy,
-               Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
+               &Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
                1, dx,
                dx, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -500,7 +500,7 @@ void CommSend(Domain& domain, int msgType,
             Domain_member src = fieldData[fi] ;
             Copy2D(domain, src, dx*dy*(dy - 1),
                1, dx*dy,
-               Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
+               &Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
                1, dx,
                dx, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -529,7 +529,7 @@ void CommSend(Domain& domain, int msgType,
             Domain_member src = fieldData[fi] ;
             Copy2D(domain, src, 0,
                dx, dx*dy,
-               Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
+               &Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
                1, dy,
                dy, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -553,7 +553,7 @@ void CommSend(Domain& domain, int msgType,
             Domain_member src = fieldData[fi] ;
             Copy2D(domain, src, dx - 1,
                dx, dx*dy,
-               Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
+               &Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount,
                1, dy,
                dy, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -581,7 +581,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, 0, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
             // for (Index_t i=0; i<dz; ++i) {
             //    destAddr[i] = (domain.*src)(i*dx*dy) ;
             // }
@@ -601,7 +601,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, 0, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
             // for (Index_t i=0; i<dx; ++i) {
             //    destAddr[i] = (domain.*src)(i) ;
             // }
@@ -621,7 +621,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, 0, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
             // for (Index_t i=0; i<dy; ++i) {
             //    destAddr[i] = (domain.*src)(i*dx) ;
             // }
@@ -641,7 +641,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*dy*(dz - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
             // for (Index_t i=0; i<dz; ++i) {
             //    destAddr[i] = (domain.*src)(dx*dy - 1 + i*dx*dy) ;
             // }
@@ -661,7 +661,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*dy*(dz - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
             // for (Index_t i=0; i<dx; ++i) {
             //   destAddr[i] = (domain.*src)(dx*(dy-1) + dx*dy*(dz-1) + i) ;
             // }
@@ -680,7 +680,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*dy*(dz - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
             // for (Index_t i=0; i<dy; ++i) {
             //    destAddr[i] = (domain.*src)(dx*dy*(dz-1) + dx - 1 + i*dx) ;
             // }
@@ -700,7 +700,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*dy*(dz - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
             // for (Index_t i=0; i<dz; ++i) {
             //    destAddr[i] = (domain.*src)(dx*(dy-1) + i*dx*dy) ;
             // }
@@ -720,7 +720,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*dy*(dz - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
             // for (Index_t i=0; i<dx; ++i) {
             //   destAddr[i] = (domain.*src)(dx*dy*(dz-1) + i) ;
             // }
@@ -740,7 +740,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*dy*(dz - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
             // for (Index_t i=0; i<dy; ++i) {
             //    destAddr[i] = (domain.*src)(dx*dy*(dz-1) + i*dx) ;
             //}
@@ -760,7 +760,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*dy*(dz - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1, dz);
             // for (Index_t i=0; i<dz; ++i) {
             //    destAddr[i] = (domain.*src)(dx - 1 + i*dx*dy) ;
             // }
@@ -780,7 +780,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx*(dy - 1), 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1, dx);
             // for (Index_t i=0; i<dx; ++i) {
             //    destAddr[i] = (domain.*src)(dx*(dy - 1) + i) ;
             // }
@@ -800,7 +800,7 @@ void CommSend(Domain& domain, int msgType,
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Domain_member src = fieldData[fi] ;
             Copy1D(domain, src, dx - 1, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
+               &Domain::commDataSend, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1, dy);
             // for (Index_t i=0; i<dy; ++i) {
             //    destAddr[i] = (domain.*src)(dx - 1 + i*dx) ;
             // }
@@ -821,7 +821,7 @@ void CommSend(Domain& domain, int msgType,
          //                              cmsg * CACHE_COHERENCE_PAD_REAL] ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], 0, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(0) ;
          }
@@ -839,7 +839,7 @@ void CommSend(Domain& domain, int msgType,
          Index_t idx = dx*dy*(dz - 1) ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], idx, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
@@ -857,7 +857,7 @@ void CommSend(Domain& domain, int msgType,
          Index_t idx = dx - 1 ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], idx, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
@@ -875,7 +875,7 @@ void CommSend(Domain& domain, int msgType,
          Index_t idx = dx*dy*(dz - 1) + (dx - 1) ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], idx, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
@@ -893,7 +893,7 @@ void CommSend(Domain& domain, int msgType,
          Index_t idx = dx*(dy - 1) ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], idx, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
@@ -911,7 +911,7 @@ void CommSend(Domain& domain, int msgType,
          Index_t idx = dx*dy*(dz - 1) + dx*(dy - 1) ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], idx, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
@@ -929,7 +929,7 @@ void CommSend(Domain& domain, int msgType,
          Index_t idx = dx*dy - 1 ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], idx, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
@@ -947,7 +947,7 @@ void CommSend(Domain& domain, int msgType,
          Index_t idx = dx*dy*dz - 1 ;
          for (Index_t fi=0; fi<xferFields; ++fi) {
             Copy1D(domain, fieldData[fi], idx, 1,
-               Domain::commDataSend, pmsg * maxPlaneComm +
+               &Domain::commDataSend, pmsg * maxPlaneComm +
                emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1, 1);
             // comBuf[fi] = (domain.*fieldData[fi])(idx) ;
          }
@@ -1018,7 +1018,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
             Domain_member dest = fieldData[fi] ;
             Add1D(domain, dest,
                0, 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             //srcAddr += opCount ;
          }
@@ -1032,7 +1032,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
             Domain_member dest = fieldData[fi] ;
             Add1D(domain, dest,
                dx*dy*(dz - 1), 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             //srcAddr += opCount ;
          }
@@ -1053,7 +1053,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
             Add2D(domain, dest,
                0,
                1, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                1, dx,
                dx, dz);
             //srcAddr += opCount ;
@@ -1069,7 +1069,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
             Add2D(domain, dest,
                dx*(dy - 1),
                1, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                1, dx,
                dx, dz);
             //srcAddr += opCount ;
@@ -1090,7 +1090,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
             Add2D(domain, dest,
                0,
                dx, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                dx, dx,
                dy, dz);
             //srcAddr += opCount ;
@@ -1106,7 +1106,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
             Add2D(domain, dest,
                dx - 1,
                dx, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                dx, dx,
                dy, dz);
             //srcAddr += opCount ;
@@ -1123,7 +1123,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             0, dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(i*dx*dy) += srcAddr[i] ;
@@ -1141,7 +1141,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             0, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(i) += srcAddr[i] ;
@@ -1159,7 +1159,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             0, dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(i*dx) += srcAddr[i] ;
@@ -1177,7 +1177,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx*dy - 1, dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(dx*dy - 1 + i*dx*dy) += srcAddr[i] ;
@@ -1195,7 +1195,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx*dy*(dz - 1), 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(dx*(dy-1) + dx*dy*(dz-1) + i) += srcAddr[i] ;
@@ -1213,7 +1213,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx - 1 + dx*dy*(dz - 1), dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(dx*dy*(dz-1) + dx - 1 + i*dx) += srcAddr[i] ;
@@ -1231,7 +1231,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx*(dy-1), dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(dx*(dy-1) + i*dx*dy) += srcAddr[i] ;
@@ -1249,7 +1249,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx*dy*(dz - 1), 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(dx*dy*(dz-1) + i) += srcAddr[i] ;
@@ -1267,7 +1267,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx*dy*(dz - 1), dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(dx*dy*(dz-1) + i*dx) += srcAddr[i] ;
@@ -1285,7 +1285,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx - 1, dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(dx - 1 + i*dx*dy) += srcAddr[i] ;
@@ -1303,7 +1303,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx*(dy - 1), 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(dx*(dy - 1) + i) += srcAddr[i] ;
@@ -1321,7 +1321,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
          Domain_member dest = fieldData[fi] ;
          Add1D(domain, dest,
             dx - 1, dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(dx - 1 + i*dx) += srcAddr[i] ;
@@ -1340,7 +1340,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             0, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(0) += comBuf[fi] ;
@@ -1357,7 +1357,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) += comBuf[fi] ;
@@ -1374,7 +1374,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) += comBuf[fi] ;
@@ -1391,7 +1391,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) += comBuf[fi] ;
@@ -1408,7 +1408,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) += comBuf[fi] ;
@@ -1425,7 +1425,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) += comBuf[fi] ;
@@ -1442,7 +1442,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) += comBuf[fi] ;
@@ -1459,7 +1459,7 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Add1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) += comBuf[fi] ;
@@ -1533,7 +1533,7 @@ void CommSyncPosVel(Domain& domain) {
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                0, 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(i) = srcAddr[i] ;
@@ -1550,7 +1550,7 @@ void CommSyncPosVel(Domain& domain) {
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                dx*dy*(dz - 1), 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(dx*dy*(dz - 1) + i) = srcAddr[i] ;
@@ -1574,7 +1574,7 @@ void CommSyncPosVel(Domain& domain) {
             Copy2D(domain, dest,
                0,
                1, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                1, dx,
                dx, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -1595,7 +1595,7 @@ void CommSyncPosVel(Domain& domain) {
             Copy2D(domain, dest,
                dx*(dy - 1),
                1, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                1, dx,
                dx, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -1622,7 +1622,7 @@ void CommSyncPosVel(Domain& domain) {
             Copy2D(domain, dest,
                0,
                dx, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                dx, dx,
                dy, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -1643,7 +1643,7 @@ void CommSyncPosVel(Domain& domain) {
             Copy2D(domain, dest,
                dx - 1,
                dx, dx*dy,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount,
                dx, dx,
                dy, dz);
             // for (Index_t i=0; i<dz; ++i) {
@@ -1665,7 +1665,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             0, dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(i*dx*dy) = srcAddr[i] ;
@@ -1683,7 +1683,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             0, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(i) = srcAddr[i] ;
@@ -1701,7 +1701,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             0, dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(i*dx) = srcAddr[i] ;
@@ -1719,7 +1719,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx*dy - 1, dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(dx*dy - 1 + i*dx*dy) = srcAddr[i] ;
@@ -1737,7 +1737,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx*dy*(dz - 1), 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(dx*(dy-1) + dx*dy*(dz-1) + i) = srcAddr[i] ;
@@ -1755,7 +1755,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx - 1 + dx*dy*(dz - 1), dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(dx*dy*(dz-1) + dx - 1 + i*dx) = srcAddr[i] ;
@@ -1773,7 +1773,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx*(dy-1), dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(dx*(dy-1) + i*dx*dy) = srcAddr[i] ;
@@ -1791,7 +1791,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx*dy*(dz - 1), 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(dx*dy*(dz-1) + i) = srcAddr[i] ;
@@ -1809,7 +1809,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx*dy*(dz - 1), dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(dx*dy*(dz-1) + i*dx) = srcAddr[i] ;
@@ -1827,7 +1827,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx - 1, dx*dy,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dz, 1,
             dz);
          // for (Index_t i=0; i<dz; ++i) {
          //    (domain.*dest)(dx - 1 + i*dx*dy) = srcAddr[i] ;
@@ -1845,7 +1845,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx*(dy - 1), 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dx, 1,
             dx);
          // for (Index_t i=0; i<dx; ++i) {
          //    (domain.*dest)(dx*(dy - 1) + i) = srcAddr[i] ;
@@ -1863,7 +1863,7 @@ void CommSyncPosVel(Domain& domain) {
          Domain_member dest = fieldData[fi] ;
          Copy1D(domain, dest,
             dx - 1, dx,
-            Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
+            &Domain::commDataRecv, pmsg * maxPlaneComm + emsg * maxEdgeComm + fi * dy, 1,
             dy);
          // for (Index_t i=0; i<dy; ++i) {
          //    (domain.*dest)(dx - 1 + i*dx) = srcAddr[i] ;
@@ -1883,7 +1883,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             0, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(0) = comBuf[fi] ;
@@ -1900,7 +1900,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) = comBuf[fi] ;
@@ -1917,7 +1917,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) = comBuf[fi] ;
@@ -1934,7 +1934,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) = comBuf[fi] ;
@@ -1951,7 +1951,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) = comBuf[fi] ;
@@ -1968,7 +1968,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) = comBuf[fi] ;
@@ -1985,7 +1985,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) = comBuf[fi] ;
@@ -2002,7 +2002,7 @@ void CommSyncPosVel(Domain& domain) {
       for (Index_t fi=0; fi<xferFields; ++fi) {
          Copy1D(domain, fieldData[fi],
             idx, 1,
-            Domain::commDataRecv, pmsg * maxPlaneComm +
+            &Domain::commDataRecv, pmsg * maxPlaneComm +
             emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL + fi, 1,
             1);
          // (domain.*fieldData[fi])(idx) = comBuf[fi] ;
@@ -2077,7 +2077,7 @@ void CommMonoQ(Domain& domain)
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                fieldOffset[fi], 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(fieldOffset[fi] + i) = srcAddr[i] ;
@@ -2095,7 +2095,7 @@ void CommMonoQ(Domain& domain)
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                fieldOffset[fi], 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(fieldOffset[fi] + i) = srcAddr[i] ;
@@ -2119,7 +2119,7 @@ void CommMonoQ(Domain& domain)
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                fieldOffset[fi], 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(fieldOffset[fi] + i) = srcAddr[i] ;
@@ -2137,7 +2137,7 @@ void CommMonoQ(Domain& domain)
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                fieldOffset[fi], 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(fieldOffset[fi] + i) = srcAddr[i] ;
@@ -2160,7 +2160,7 @@ void CommMonoQ(Domain& domain)
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                fieldOffset[fi], 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(fieldOffset[fi] + i) = srcAddr[i] ;
@@ -2178,7 +2178,7 @@ void CommMonoQ(Domain& domain)
             Domain_member dest = fieldData[fi] ;
             Copy1D(domain, dest,
                fieldOffset[fi], 1,
-               Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
+               &Domain::commDataRecv, pmsg * maxPlaneComm + fi * opCount, 1,
                opCount);
             // for (Index_t i=0; i<opCount; ++i) {
             //    (domain.*dest)(fieldOffset[fi] + i) = srcAddr[i] ;
