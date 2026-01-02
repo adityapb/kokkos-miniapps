@@ -331,35 +331,35 @@ void CommRecv(Domain& domain, int msgType, Index_t xferFields,
 
 /******************************************/
 
-void Copy1D(Domain &domain, Domain_member src, int src_offset,
+void Copy1D(Kokkos::View<Real_t*> src, int src_offset,
    int src_stride,
-   Domain_member dest, int dst_offset, int dst_stride,
+    Kokkos::View<Real_t*> dest, int dst_offset, int dst_stride,
    int size)
 {
    Kokkos::parallel_for("Copy1D", size,
                        KOKKOS_LAMBDA(const int i) {
-      (domain.*dest)(dst_offset + i * dst_stride) = (domain.*src)(src_offset + i * src_stride);
+      dest[dst_offset + i * dst_stride] = src[src_offset + i * src_stride];
    });
    Kokkos::fence();
 }
 
-void Add1D(Domain &domain, Domain_member src, int src_offset, int src_stride,
-   Domain_member dest, int dst_offset, int dst_stride,
+void Add1D(Kokkos::View<Real_t*> src, int src_offset, int src_stride,
+   Kokkos::View<Real_t*> dest, int dst_offset, int dst_stride,
    int size)
 {
    Kokkos::parallel_for("Add1D", size,
                        KOKKOS_LAMBDA(const int i) {
-      (domain.*dest)(dst_offset + i * dst_stride) += (domain.*src)(src_offset + i * src_stride);
+      dest[dst_offset + i * dst_stride] += src[src_offset + i * src_stride];
    });
    Kokkos::fence();
 }
 
 /******************************************/
 
-void Copy2D(Domain &domain, Domain_member src, 
+void Copy2D(Kokkos::View<Real_t*> src, 
    int src_offset,
    int src_stride_x, int src_stride_y,
-   Domain_member dest, 
+   Kokkos::View<Real_t*> dest, 
    int dst_offset,
    int dst_stride_x, int dst_stride_y,
    int dim_x, int dim_y)
@@ -367,15 +367,15 @@ void Copy2D(Domain &domain, Domain_member src,
    Kokkos::MDRangePolicy<Kokkos::Rank<2>> policy({0, 0}, {dim_x, dim_y});
    Kokkos::parallel_for("Copy2D", policy,
                        KOKKOS_LAMBDA(const int i, const int j) {
-      (domain.*dest)(dst_offset + j * dst_stride_y + i * dst_stride_x) = 
-         (domain.*src)(src_offset + j * src_stride_y + i * src_stride_x);
+      dest[dst_offset + j * dst_stride_y + i * dst_stride_x] = 
+         src[src_offset + j * src_stride_y + i * src_stride_x];
    });
 }
 
-void Add2D(Domain &domain, Domain_member src, 
+void Add2D(Kokkos::View<Real_t*> src, 
    int src_offset,
    int src_stride_x, int src_stride_y,
-   Domain_member dest, 
+   Kokkos::View<Real_t*> dest, 
    int dst_offset,
    int dst_stride_x, int dst_stride_y,
    int dim_x, int dim_y)
@@ -383,15 +383,15 @@ void Add2D(Domain &domain, Domain_member src,
    Kokkos::MDRangePolicy<Kokkos::Rank<2>> policy({0, 0}, {dim_x, dim_y});
    Kokkos::parallel_for("Add2D", policy,
                        KOKKOS_LAMBDA(const int i, const int j) {
-      (domain.*dest)(dst_offset + j * dst_stride_y + i * dst_stride_x) += 
-         (domain.*src)(src_offset + j * src_stride_y + i * src_stride_x);
+      dest[dst_offset + j * dst_stride_y + i * dst_stride_x] += 
+         src[src_offset + j * src_stride_y + i * src_stride_x];
    });
 }
 
 /******************************************/
 
 void CommSend(Domain& domain, int msgType,
-              Index_t xferFields, Domain_member *fieldData,
+              Index_t xferFields, Kokkos::View<Real_t*> *fieldData,
               Index_t dx, Index_t dy, Index_t dz, bool doSend, bool planeOnly)
 {
 
@@ -447,8 +447,8 @@ void CommSend(Domain& domain, int msgType,
       if (planeMin) {
          //destAddr = &domain.commDataSend[pmsg * maxPlaneComm] ;
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
-            Domain_member src = fieldData[fi] ;
-            Copy1D(domain, src, 0, 1, &Domain::commDataSend, pmsg * maxPlaneComm + fi * sendCount, 1, sendCount);
+            Kokkos::View<Real_t*> src = fieldData[fi] ;
+            Copy1D(src, 0, 1, domain.commDataSendView, pmsg * maxPlaneComm + fi * sendCount, 1, sendCount);
             //destAddr += sendCount ;
          }
          //destAddr -= xferFields*sendCount ;

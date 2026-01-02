@@ -783,10 +783,10 @@ static inline void CalcForceForNodes(Domain &domain) {
   CalcVolumeForceForElems(domain);
 
 #if USE_MPI
-  Domain_member fieldData[3];
-  fieldData[0] = &Domain::fx;
-  fieldData[1] = &Domain::fy;
-  fieldData[2] = &Domain::fz;
+   Kokkos::View<Real_t*> fieldData[3];
+  fieldData[0] = domain.m_fx;
+  fieldData[1] = domain.m_fy;
+  fieldData[2] = domain.m_fz;
 
   CommSend(domain, MSG_COMM_SBN, 3, fieldData, domain.sizeX() + 1,
            domain.sizeY() + 1, domain.sizeZ() + 1, true, false);
@@ -866,7 +866,7 @@ static inline void CalcPositionForNodes(Domain &domain, const Real_t dt,
 
 static inline void LagrangeNodal(Domain &domain) {
 #ifdef SEDOV_SYNC_POS_VEL_EARLY
-  Domain_member fieldData[6];
+  Kokkos::View<Real_t*> fieldData[6];
 #endif
 
   const Real_t delt = domain.deltatime();
@@ -890,12 +890,12 @@ static inline void LagrangeNodal(Domain &domain) {
   CalcPositionForNodes(domain, delt, domain.numNode());
 #if USE_MPI
 #ifdef SEDOV_SYNC_POS_VEL_EARLY
-  fieldData[0] = &Domain::x;
-  fieldData[1] = &Domain::y;
-  fieldData[2] = &Domain::z;
-  fieldData[3] = &Domain::xd;
-  fieldData[4] = &Domain::yd;
-  fieldData[5] = &Domain::zd;
+  fieldData[0] = domain.m_x;
+  fieldData[1] = domain.m_y;
+  fieldData[2] = domain.m_z;
+  fieldData[3] = domain.m_xd;
+  fieldData[4] = domain.m_yd;
+  fieldData[5] = domain.m_zd;
 
   CommSend(domain, MSG_SYNC_POS_VEL, 6, fieldData, domain.sizeX() + 1,
            domain.sizeY() + 1, domain.sizeZ() + 1, false, false);
@@ -1550,12 +1550,12 @@ static inline void CalcQForElems(Domain &domain) {
     CalcMonotonicQGradientsForElems(domain);
 
 #if USE_MPI
-    Domain_member fieldData[3];
+    Kokkos::View<Real_t*> fieldData[3];
 
-    fieldData[0] = &Domain::delv_xi;
-    fieldData[1] = &Domain::delv_eta;
-    fieldData[2] = &Domain::delv_zeta;
-
+    fieldData[0] = domain.m_delv_xi;
+    fieldData[1] = domain.m_delv_eta;
+    fieldData[2] = domain.m_delv_zeta;
+    
     CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
              domain.sizeZ(), true, true);
 
@@ -2029,7 +2029,7 @@ static inline void CalcTimeConstraintsForElems(Domain &domain) {
 
 static inline void LagrangeLeapFrog(Domain &domain) {
 #ifdef SEDOV_SYNC_POS_VEL_LATE
-  Domain_member fieldData[6];
+  Kokkos::View<Real_t*> fieldData[6];
 #endif
   LagrangeNodal(domain);
 
@@ -2042,12 +2042,12 @@ static inline void LagrangeLeapFrog(Domain &domain) {
   CommRecv(domain, MSG_SYNC_POS_VEL, 6, domain.sizeX() + 1, domain.sizeY() + 1,
            domain.sizeZ() + 1, false, false);
 
-  fieldData[0] = &Domain::x;
-  fieldData[1] = &Domain::y;
-  fieldData[2] = &Domain::z;
-  fieldData[3] = &Domain::xd;
-  fieldData[4] = &Domain::yd;
-  fieldData[5] = &Domain::zd;
+  fieldData[0] = domain.m_x;
+  fieldData[1] = domain.m_y;
+  fieldData[2] = domain.m_z;
+  fieldData[3] = domain.m_xd;
+  fieldData[4] = domain.m_yd;
+  fieldData[5] = domain.m_zd;
 
   CommSend(domain, MSG_SYNC_POS_VEL, 6, fieldData, domain.sizeX() + 1,
            domain.sizeY() + 1, domain.sizeZ() + 1, false, false);
@@ -2069,7 +2069,7 @@ int main(int argc, char *argv[]) {
   struct cmdLineOpts opts;
 
 #if USE_MPI
-  Domain_member fieldData;
+   Kokkos::View<Real_t*> fieldData;
 
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &numRanks);
@@ -2119,7 +2119,7 @@ int main(int argc, char *argv[]) {
                 opts.balance, opts.cost);
 
 #if USE_MPI
-  fieldData = &Domain::nodalMass;
+  fieldData = locDom.m_nodalMass;
 
   // Initial domain boundary communication
   CommRecv(locDom, MSG_COMM_SBN, 1, locDom.sizeX() + 1, locDom.sizeY() + 1,
