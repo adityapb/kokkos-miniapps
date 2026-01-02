@@ -478,11 +478,18 @@ Domain::SetupCommBuffers(Int_t edgeNodes)
 		 (m_rowMax & m_colMax & m_planeMin) +
 		 (m_rowMax & m_colMax & m_planeMax)) * CACHE_COHERENCE_PAD_REAL ;
 
-  this->commDataSend = Allocate<Real_t>(comBufSize) ;
-  this->commDataRecv = Allocate<Real_t>(comBufSize) ;
+  //this->commDataSend = Allocate<Real_t>(comBufSize) ;
+  //this->commDataRecv = Allocate<Real_t>(comBufSize) ;
+
+  Kokkos::resize(this->commDataSendView, comBufSize);
+  Kokkos::resize(this->commDataRecvView, comBufSize);
+
+  Kokkos::deep_copy(this->commDataSendView, 0);
+  Kokkos::deep_copy(this->commDataRecvView, 0);
+
   // prevent floating point exceptions 
-  memset(this->commDataSend, 0, comBufSize*sizeof(Real_t)) ;
-  memset(this->commDataRecv, 0, comBufSize*sizeof(Real_t)) ;
+  //memset(this->commDataSend, 0, comBufSize*sizeof(Real_t)) ;
+  //memset(this->commDataRecv, 0, comBufSize*sizeof(Real_t)) ;
 #endif   
 
   // Boundary nodesets
