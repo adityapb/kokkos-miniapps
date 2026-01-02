@@ -455,11 +455,11 @@ public:
     return &m_nodeElemCornerList[m_nodeElemStart[idx]];
   }
 
-  KOKKOS_INLINE_FUNCTION Real_t commDataSend(Index_t idx) const {
+  KOKKOS_INLINE_FUNCTION Real_t& commDataSend(Index_t idx) const {
     return commDataSendView[idx];
   }
 
-  KOKKOS_INLINE_FUNCTION  Real_t commDataRecv(Index_t idx) const {
+  KOKKOS_INLINE_FUNCTION  Real_t& commDataRecv(Index_t idx) const {
     return commDataRecvView[idx];
   }
 
