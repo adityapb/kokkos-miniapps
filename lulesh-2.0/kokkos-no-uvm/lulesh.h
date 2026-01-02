@@ -753,7 +753,7 @@ void CommRecv(Domain &domain, Int_t msgType, Index_t xferFields, Index_t dx,
 void CommSend(Domain &domain, Int_t msgType, Index_t xferFields,
               Kokkos::View<Real_t*> *fieldData, Index_t dx, Index_t dy, Index_t dz,
               bool doSend, bool planeOnly);
-void CommSBN(Domain &domain, Int_t xferFields, Domain_member *fieldData);
+void CommSBN(Domain &domain, Int_t xferFields, Kokkos::View<Real_t*> *fieldData);
 void CommSyncPosVel(Domain &domain);
 void CommMonoQ(Domain &domain);
 
