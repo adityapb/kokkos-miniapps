@@ -59,6 +59,8 @@
 void CommRecv(Domain& domain, int msgType, Index_t xferFields,
               Index_t dx, Index_t dy, Index_t dz, bool doRecv, bool planeOnly) {
 
+   printf("Entering CommRecv\n") ;
+
    if (domain.numRanks() == 1)
       return ;
 
@@ -322,6 +324,9 @@ void CommRecv(Domain& domain, int msgType, Index_t xferFields,
          ++cmsg ;
       }
    }
+
+   printf("Posted CommRecv (%d plane, %d edge, %d corner messages)\n",
+          pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
@@ -389,6 +394,8 @@ void CommSend(Domain& domain, int msgType,
               Index_t xferFields, Domain_member *fieldData,
               Index_t dx, Index_t dy, Index_t dz, bool doSend, bool planeOnly)
 {
+
+   printf("CommSend called\n");
 
    if (domain.numRanks() == 1)
       return ;
@@ -961,11 +968,15 @@ void CommSend(Domain& domain, int msgType,
    }
 
    MPI_Waitall(26, domain.sendRequest, status) ;
+   printf("Completed CommSend (%d plane, %d edge, %d corner messages)\n",
+          pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
 
 void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
+
+   printf("Entering CommSBN\n") ;
 
    if (domain.numRanks() == 1)
       return ;
@@ -1468,11 +1479,16 @@ void CommSBN(Domain& domain, int xferFields, Domain_member *fieldData) {
       }
       ++cmsg ;
    }
+
+   printf("Completed CommSBN (%d plane, %d edge, %d corner messages)\n",
+          pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
 
 void CommSyncPosVel(Domain& domain) {
+
+   printf("Entering CommSyncPosVel\n") ;
 
    if (domain.numRanks() == 1)
       return ;
@@ -2011,12 +2027,16 @@ void CommSyncPosVel(Domain& domain) {
       }
       ++cmsg ;
    }
+
+   printf("Completed CommSyncPosVel (%d plane, %d edge, %d corner messages)\n",
+          pmsg, emsg, cmsg) ;
 }
 
 /******************************************/
 
 void CommMonoQ(Domain& domain)
 {
+   printf("Entering CommMonoQ\n") ;
    if (domain.numRanks() == 1)
       return ;
 
@@ -2190,6 +2210,9 @@ void CommMonoQ(Domain& domain)
          ++pmsg ;
       }
    }
+
+   printf("Completed CommMonoQ (%d plane messages)\n",
+          pmsg) ;
 }
 
 #endif
