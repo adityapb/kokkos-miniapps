@@ -54,6 +54,7 @@ add_custom_command(
 
 if(Charm_ENABLE_GPU)
     set(CMAKE_CXX_COMPILER "${CHARMC}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -noswitcherror")
     add_executable(lulesh ${LULESH_SOURCES} ${GENERATED_DIR}/lulesh.decl.h ${GENERATED_DIR}/lulesh.def.h)
     target_include_directories(lulesh PRIVATE ${CMAKE_SOURCE_DIR} ${GENERATED_DIR} ${CHARM_DIR}/include)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPU_OPTS} ${LD_OPTS}")
