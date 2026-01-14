@@ -1,5 +1,5 @@
-set(CHARM_DIR "/home1/08450/tg877491/charm")
-set(BASE_DIR "/home1/08450/tg877491/miniMD/charm")
+set(CHARM_DIR "/work/08450/tg877491/vista/charm-cuda/")
+set(BASE_DIR "/work/08450/tg877491/vista/kokkos-miniapps-new/lulesh-2.0/kokkos-charm/")
 set(CUDA_DIR "/home1/apps/nvidia/Linux_aarch64/24.7/cuda/12.5/")
 set(KOKKOS_DIR "/home1/apps/nvidia24/kokkos/4.5.01/cuda/")
 
