@@ -1,7 +1,6 @@
 #include "lulesh.h"
 
 
-#include <mpi.h>
 #include <string.h>
 
 /* Comm Routines */
