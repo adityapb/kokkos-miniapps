@@ -1,0 +1,11 @@
+set(CHARM_DIR "/home1/08450/tg877491/charm")
+set(BASE_DIR "/home1/08450/tg877491/miniMD/charm")
+set(CUDA_DIR "/home1/apps/nvidia/Linux_aarch64/24.7/cuda/12.5/")
+set(KOKKOS_DIR "/home1/apps/nvidia24/kokkos/4.5.01/cuda/")
+
+set(CHARMC "${CHARM_DIR}/bin/charmc")
+set(CPU_OPTS "-c++-option -std=c++17 -O3 -march=native -DNDEBUG")
+set(GPU_OPTS "-O3 -march=native -DNDEBUG")
+set(GPU_LINK_OPTS -O3 -language charm++ -L${KOKKOS_DIR}/lib64 -lkokkoscore -lkokkoscontainers -lkokkossimd -L${CUDA_DIR}/lib64 -lcuda -lcudart -Wl,-rpath,${KOKKOS_DIR}/lib64 -Wl,-rpath,${CUDA_DIR}/lib64)
+set(LD_OPTS "")
+set(INCS "-I${BASE_DIR}")

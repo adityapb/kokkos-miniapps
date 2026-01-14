@@ -1,0 +1,219 @@
+mainmodule lulesh {
+    include "lulesh.h"
+
+    readonly CProxy_Main mainProxy;
+    readonly CProxy_KokkosManager kokkosProxy;
+    readonly CProxy_DomainChare domainProxy;
+
+    mainchare Main {
+        entry Main(CkArgMsg* m);
+
+        entry [reductiontarget] void done();
+
+        entry [reductiontarget] void initDone() {
+            serial {    
+                start = CkWallTimer();
+                domainProxy.run();
+            }
+
+            when done() {
+                serial {
+                    CkPrintf("Total runtime = %f\n", CkWallTimer() - start);
+                    CkExit();
+                }
+            }
+        }
+    };
+
+    group KokkosManager {
+        entry KokkosManager();
+    };
+
+    array [3D] DomainChare {
+        entry DomainChare(int numRanks, Index_t nx, int tp, int nr,
+                          int balance, int cost, int numChares_);
+
+        entry void init(int numRanks, Index_t nx, int tp, int nr,
+                          int balance, int cost, int numChares_) {
+            serial "NodalMassComm" {
+                // setup commData maps
+                CommDataInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
+                             locDom->sizeZ() + 1, false, false, commDataPosVel);
+                CommDataInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
+                             locDom->sizeZ() + 1, true, false, commDataSBN);
+                CommDataInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
+                             locDom->sizeZ(), true, true, commDataQ);
+
+                Kokkos::View<Real_t*> fieldData;
+                fieldData = locDom.m_nodalMass;
+                CommSend(*locDom, MSG_COMM_SBN, 1, &fieldData, locDom->sizeX() + 1,
+                         locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false);
+
+                recvRef = MSG_COMM_SBN | iter;
+                commNbrs = commDataSBN.size();
+            }
+
+            for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
+                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                        int size, nocopydevice Real_t buf[size]) {
+                    serial "processRemoteMass" {
+                        processRemoteMass(ref, x, y, z, xferFields, size, buf);
+                    }
+                }
+            }
+            
+            serial {
+                CkCallback cb(CkIndex_Main::initDone(NULL), mainProxy);
+                contribute(cb);
+            }
+        }
+        
+        entry [reductiontarget] void TimeStepUpdate(Real_t newdt);
+
+        entry void CommRecv(int ref, int x, int y, int z, int xferFields, 
+            int size, nocopydevice Real_t buf[size]);
+
+        entry void run() {
+            serial "TimeStepCalculation" {
+                if ((opts.showProg != 0) && (opts.quiet == 0) && (flatIndex == 0)) {
+                    CkPrintf("cycle = %d, time = %e, dt=%e\n", locDom->cycle(),
+                             double(locDom->time()), double(locDom->deltatime()));
+                }
+
+                Real_t gnewdt = TimeStepCalculateLocal(*locDom);
+
+                CkCallback cb(CkIndex_DomainChare::TimeStepUpdate(NULL), thisProxy);
+                if (sizeof(Real_t) == 4)
+                    contribute(sizeof(Real_t), &gnewdt, CkReduction::min_float, cb);
+                else
+                    contribute(sizeof(Real_t), &gnewdt, CkReduction::min_double, cb);
+            }
+
+            when TimeStepUpdate(Real_t newdt) {
+                serial "TimeIncrement" {
+                    TimeIncrement(newdt);
+                }
+            }
+
+            serial "CalcForceForNodes" {
+                Domain& domain = *locDom;
+                CalcForceForNodes(domain, computeSpace);
+
+                Kokkos::View<Real_t*> fieldData[3];
+                fieldData[0] = domain.m_fx;
+                fieldData[1] = domain.m_fy;
+                fieldData[2] = domain.m_fz;
+                CommSend(domain, MSG_COMM_SBN, 3, fieldData, domain.sizeX() + 1,
+                         domain.sizeY() + 1, domain.sizeZ() + 1, true, false);
+                
+                recvRef = MSG_COMM_SBN | iter;
+                commNbrs = commDataSBN.size();
+            }
+
+            for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
+                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                        int size, nocopydevice Real_t buf[size]) {
+                    serial "processRemoteForce" {
+                        processRemoteForce(ref, x, y, z, xferFields, size, buf);
+                    }
+                }
+            }
+
+            serial "LagrangeNodal" {
+                Domain& domain = *locDom;
+                const Real_t delt = domain.deltatime();
+                Real_t u_cut = domain.u_cut();
+                
+                CalcAccelerationForNodes(domain, domain.numNode(), computeSpace);
+
+                ApplyAccelerationBoundaryConditionsForNodes(domain, computeSpace);
+
+                CalcVelocityForNodes(domain, delt, u_cut, domain.numNode(), computeSpace);
+
+                CalcPositionForNodes(domain, delt, domain.numNode(), computeSpace);
+
+                Kokkos::View<Real_t> fieldData[6];
+                fieldData[0] = domain.m_x;
+                fieldData[1] = domain.m_y;
+                fieldData[2] = domain.m_z;
+                fieldData[3] = domain.m_xd;
+                fieldData[4] = domain.m_yd;
+                fieldData[5] = domain.m_zd;
+                CommSend(domain, MSG_SYNC_POS_VEL, 6, fieldData, domain.sizeX() + 1,
+                         domain.sizeY() + 1, domain.sizeZ() + 1, false, false);
+
+                recvRef = MSG_SYNC_POS_VEL | iter;
+                commNbrs = commDataPosVel.size();
+            }
+
+            for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
+                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                        int size, nocopydevice Real_t buf[size]) {
+                    serial "processRemotePosVel" {
+                        processRemotePosVel(ref, x, y, z, xferFields, size, buf);
+                    }
+                }
+            }
+
+            serial "LagrangeElements" {
+                Domain& domain = *locDom;
+                CalcLagrangeElements(domain, computeSpace);
+                CalcQForElems(domain, computeSpace);
+
+                Kokkos::View<Real_t*> fieldData[3];
+                fieldData[0] = domain.m_delv_xi;
+                fieldData[1] = domain.m_delv_eta;
+                fieldData[2] = domain.m_delv_zeta;
+                CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
+                         domain.sizeZ(), true, true);
+
+                recvRef = MSG_MONOQ | iter;
+                commNbrs = commDataQ.size();
+            }
+
+            for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
+                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                        int size, nocopydevice Real_t buf[size]) {
+                    serial "processRemoteQ" {
+                        processRemoteQ(ref, x, y, z, xferFields, size, buf);
+                    }
+                }
+            }
+
+            serial "LagrangeElementsPost" {
+                Domain &domain = *locDom;
+                CalcMonotonicQForElems(domain, computeSpace);
+
+                domain.DeallocateGradients();
+
+                Index_t idx = 0;
+                Kokkos::parallel_reduce(RangePolicy(computeSpace, 0, numElem), 
+                    KOKKOS_LAMBDA (const Index_t& i, Index_t& count) {
+                    if ( domain.q(i) > domain.qstop() ) {
+                        count++ ;
+                    }
+                }, idx);
+
+                if (idx > 0) {
+                    CkAbort("QStopError");
+                }
+
+                ApplyMaterialPropertiesForElems(domain, computeSpace);
+
+                UpdateVolumesForElems(domain, domain.v_cut(), numElem, computeSpace);
+
+                CalcTimeConstraintsForElems(domain, computeSpace);
+
+                iter++;
+
+                // run next iteration
+                if ((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its))
+                    thisProxy[thisIndex].run();
+                else {
+                    CkCallback cb(CkIndex_Main::done(NULL), mainProxy);
+                    contribute(cb);
+                }
+            }
+        }
+    };
+};
