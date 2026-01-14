@@ -2,7 +2,7 @@
 // OpenMP will be compiled in if this flag is set to 1 AND the compiler beging
 // used supports it (i.e. the _OPENMP symbol is defined)
 
-#include "lulesh-domain.h"
+//#include "lulesh-domain.h"
 #include "lulesh.decl.h"
 
 class KokkosManager : public CBase_KokkosManager {
