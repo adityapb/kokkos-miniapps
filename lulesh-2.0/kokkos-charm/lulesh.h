@@ -526,18 +526,12 @@ public:
 // MPI-Related additional data
 //
 
-#if USE_MPI
   // Communication Work space
   //Real_t *commDataSend;
   //Real_t *commDataRecv;
 
   Kokkos::View<Real_t*> commDataSendView;
   Kokkos::View<Real_t*> commDataRecvView;
-
-  // Maximum number of block neighbors
-  MPI_Request recvRequest[26]; // 6 faces + 12 edges + 8 corners
-  MPI_Request sendRequest[26]; // 6 faces + 12 edges + 8 corners
-#endif
 
   void BuildMesh(Int_t nx, Int_t edgeNodes, Int_t edgeElems);
   void SetupThreadSupportStructures();
