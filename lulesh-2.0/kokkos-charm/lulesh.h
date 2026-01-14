@@ -770,11 +770,14 @@ public:
   DomainChare(CkMigrateMessage *msg) : CBase_DomainChare(msg) {}
 
   DomainChare(int numRanks, Index_t nx_, int nr_,
-            int balance_, int cost_, int showProg_, int quiet_,
-            int its_, int viz_, int do_atomic_, 
-            int numChares_);
+              int balance_, int cost_, int showProg_, int quiet_,
+              int its_, int viz_, int do_atomic_, 
+              int numChares_);
 
   ~DomainChare() { delete locDom; }
+
+  void init(int numRanks, Index_t nx, int tp, int nr,
+            int balance, int cost, int numChares_);
 
   void CommSend(Domain& domain, int msgType, Index_t xferFields, 
     Kokkos::View<Real_t*> *fieldData, Index_t dx, Index_t dy, Index_t dz, 

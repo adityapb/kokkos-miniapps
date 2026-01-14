@@ -1,5 +1,5 @@
 mainmodule lulesh {
-    include "lulesh.h"
+    include "lulesh.h";
 
     readonly CProxy_Main mainProxy;
     readonly CProxy_KokkosManager kokkosProxy;
