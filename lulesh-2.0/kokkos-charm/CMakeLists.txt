@@ -11,6 +11,23 @@ set(Kokkos_ROOT ${KOKKOS_DIR})
 find_package(Kokkos 4.2 REQUIRED CONFIG)
 #find_package(MPI REQUIRED COMPONENTS CXX)
 
+# --- START OF FIX ---
+# 1. Strip the flag from variables set in config.cmake
+string(REPLACE "-Wext-lambda-captures-this" "" CPU_OPTS "${CPU_OPTS}")
+
+# 2. Strip the flag from global CMake flags
+string(REPLACE "-Wext-lambda-captures-this" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+# 3. Strip the flag from the imported Kokkos target itself
+if(TARGET Kokkos::kokkos)
+    get_target_property(KOKKOS_OPTIONS Kokkos::kokkos INTERFACE_COMPILE_OPTIONS)
+    if(KOKKOS_OPTIONS)
+        list(REMOVE_ITEM KOKKOS_OPTIONS "-Wext-lambda-captures-this")
+        set_target_properties(Kokkos::kokkos PROPERTIES INTERFACE_COMPILE_OPTIONS "${KOKKOS_OPTIONS}")
+    endif()
+endif()
+# --- END OF FIX ---
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
