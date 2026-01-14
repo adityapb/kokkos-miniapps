@@ -22,7 +22,7 @@ mainmodule lulesh {
                     CkExit();
                 }
             }
-        }
+        };
     };
 
     group KokkosManager {
@@ -30,8 +30,10 @@ mainmodule lulesh {
     };
 
     array [3D] DomainChare {
-        entry DomainChare(int numRanks, Index_t nx, int tp, int nr,
-                          int balance, int cost, int numChares_);
+        entry DomainChare(int numRanks, Index_t nx_, int nr_,
+            int balance_, int cost_, int showProg_, int quiet_,
+            int its_, int viz_, int do_atomic_, 
+            int numChares_);
 
         entry void init(int numRanks, Index_t nx, int tp, int nr,
                           int balance, int cost, int numChares_) {
@@ -66,7 +68,7 @@ mainmodule lulesh {
                 CkCallback cb(CkIndex_Main::initDone(NULL), mainProxy);
                 contribute(cb);
             }
-        }
+        };
         
         entry [reductiontarget] void TimeStepUpdate(Real_t newdt);
 
@@ -214,6 +216,6 @@ mainmodule lulesh {
                     contribute(cb);
                 }
             }
-        }
+        };
     };
 };
