@@ -11,22 +11,6 @@ set(Kokkos_ROOT ${KOKKOS_DIR})
 find_package(Kokkos 4.2 REQUIRED CONFIG)
 #find_package(MPI REQUIRED COMPONENTS CXX)
 
-# --- START OF FIX ---
-# 1. Strip the flag from variables set in config.cmake
-string(REPLACE "-Wext-lambda-captures-this" "" CPU_OPTS "${CPU_OPTS}")
-
-# 2. Strip the flag from global CMake flags
-string(REPLACE "-Wext-lambda-captures-this" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-
-# 3. Strip the flag from the imported Kokkos target itself
-if(TARGET Kokkos::kokkos)
-    get_target_property(KOKKOS_OPTIONS Kokkos::kokkos INTERFACE_COMPILE_OPTIONS)
-    if(KOKKOS_OPTIONS)
-        list(REMOVE_ITEM KOKKOS_OPTIONS "-Wext-lambda-captures-this")
-        set_target_properties(Kokkos::kokkos PROPERTIES INTERFACE_COMPILE_OPTIONS "${KOKKOS_OPTIONS}")
-    endif()
-endif()
-# --- END OF FIX ---
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -53,10 +37,16 @@ add_custom_command(
 )
 
 if(Charm_ENABLE_GPU)
-    set(CMAKE_CXX_COMPILER "${CHARMC}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -noswitcherror")
-    add_executable(lulesh ${LULESH_SOURCES} ${GENERATED_DIR}/lulesh.decl.h ${GENERATED_DIR}/lulesh.def.h)
-    target_include_directories(lulesh PRIVATE ${CMAKE_SOURCE_DIR} ${GENERATED_DIR} ${CHARM_DIR}/include)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPU_OPTS} ${LD_OPTS}")
-    target_link_libraries(lulesh PRIVATE Kokkos::kokkos)
+    add_library(lulesh_obj OBJECT ${LULESH_SOURCES} ${GENERATED_DIR}/lulesh.decl.h ${GENERATED_DIR}/lulesh.def.h)
+    target_include_directories(lulesh_obj PRIVATE ${CMAKE_SOURCE_DIR} ${GENERATED_DIR} ${CHARM_DIR}/include)
+    target_link_libraries(lulesh_obj PUBLIC Kokkos::kokkos)
+    string(REPLACE " " ";" GPU_COMPILE_OPTIONS "${GPU_OPTS}")
+    target_compile_options(lulesh_obj PRIVATE ${GPU_COMPILE_OPTIONS})
+    add_custom_target(lulesh ALL
+        COMMAND ${CHARMC} ${GPU_LINK_OPTS} ${LD_OPTS} $<TARGET_OBJECTS:lulesh_obj> -o ${CMAKE_BINARY_DIR}/lulesh
+        DEPENDS lulesh_obj
+        COMMENT "Linking lulesh with Charm++/Kokkos (GPU)"
+        VERBATIM
+        COMMAND_EXPAND_LISTS
+    )
 endif()
