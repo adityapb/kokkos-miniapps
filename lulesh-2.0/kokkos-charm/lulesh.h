@@ -67,3 +67,19 @@ class Main : public CBase_Main {
 public:
   Main(CkArgMsg *m);
 };
+
+class PackingDoneMsg {
+public:
+  PackingDoneMsg() {}
+
+  PackingDoneMsg(CProxy_DomainChare proxy_, int msgType_, int x_, int y_, int z_,
+                int xferFields_, int sendCount_, int offset_)
+      : proxy(proxy_), msgType(msgType_), x(x_), y(y_), z(z_),
+        xferFields(xferFields_), sendCount(sendCount_), offset(offset_) {}
+
+  CProxy_DomainChare proxy;
+  int msgType;
+  int x, y, z;
+  int xferFields;
+  int sendCount, offset;
+};
