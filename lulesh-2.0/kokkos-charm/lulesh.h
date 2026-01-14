@@ -1,25 +1,6 @@
 
-#if !defined(USE_MPI)
-#error "You should specify USE_MPI=0 or USE_MPI=1 on the compile line"
-#endif
-
 // OpenMP will be compiled in if this flag is set to 1 AND the compiler beging
 // used supports it (i.e. the _OPENMP symbol is defined)
-#define USE_OMP 1
-
-#if USE_MPI
-#include <mpi.h>
-
-/*
-   define one of these three symbols:
-
-   SEDOV_SYNC_POS_VEL_NONE
-   SEDOV_SYNC_POS_VEL_EARLY
-   SEDOV_SYNC_POS_VEL_LATE
-*/
-
-#define SEDOV_SYNC_POS_VEL_EARLY 1
-#endif
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Vector.hpp>
