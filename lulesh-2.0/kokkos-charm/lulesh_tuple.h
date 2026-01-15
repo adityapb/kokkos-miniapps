@@ -1,17 +1,9 @@
-#if !defined(USE_MPI)
-# error "You should specify USE_MPI=0 or USE_MPI=1 on the compile line"
-#endif
-
+#ifndef LULESH_TUPLE_H
+#define LULESH_TUPLE_H
 
 // OpenMP will be compiled in if this flag is set to 1 AND the compiler beging
 // used supports it (i.e. the _OPENMP symbol is defined)
 #define USE_OMP 1
-
-#if USE_MPI
-#include <mpi.h>
-#endif
-
-#include <mpi.h>
 
 /*
    define one of these three symbols:
@@ -608,3 +600,5 @@ void CommMonoQ(Domain& domain);
 // lulesh-init
 void InitMeshDecomp(Int_t numRanks, Int_t myRank,
                     Int_t *col, Int_t *row, Int_t *plane, Int_t *side);
+
+#endif // LULESH_TUPLE_H

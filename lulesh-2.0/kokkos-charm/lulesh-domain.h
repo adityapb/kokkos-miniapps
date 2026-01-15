@@ -1,3 +1,5 @@
+#ifndef LULESH_DOMAIN_H
+#define LULESH_DOMAIN_H
 
 // OpenMP will be compiled in if this flag is set to 1 AND the compiler beging
 // used supports it (i.e. the _OPENMP symbol is defined)
@@ -833,3 +835,5 @@ struct reduce_double3 {
     z += src.z;
   }
 };
+
+#endif // LULESH_DOMAIN_H
