@@ -1,12 +1,19 @@
 #ifndef LULESH_H
 #define LULESH_H
 
+#include <unordered_map>
+#include <tuple>
+#include <functional>
+
 // OpenMP will be compiled in if this flag is set to 1 AND the compiler beging
 // used supports it (i.e. the _OPENMP symbol is defined)
 
 //#include "lulesh-domain.h"
 #include "lulesh.decl.h"
 #include "hapi.h"
+
+using CommDataMap_t = std::unordered_map<std::tuple<int, int, int>, CommData, std::hash<std::tuple<int, int, int>>>;
+using CommDataMapIter_t = typename CommDataMap_t::iterator;
 
 class KokkosManager : public CBase_KokkosManager {
 public:
@@ -21,9 +28,6 @@ public:
 
 class DomainChare : public CBase_DomainChare {
 public:
-  using CommDataMap_t = std::unordered_map<std::tuple<int, int, int>, CommData, std::hash<std::tuple<int, int, int>>>;
-  using CommDataMapIter_t = typename CommDataMap_t::iterator;
-
   DomainChare(CkMigrateMessage *msg) : CBase_DomainChare(msg) {}
 
   DomainChare(int numRanks, Index_t nx_, int nr_,

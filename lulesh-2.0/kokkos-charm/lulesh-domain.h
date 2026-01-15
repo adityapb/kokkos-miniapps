@@ -725,6 +725,8 @@ public:
     dst_stride[1] = dst_stride_1;
   }
 
+  CommData() {}
+
   int offset;
   int src_stride[2];
   int dst_stride[2];
