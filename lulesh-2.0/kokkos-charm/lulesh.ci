@@ -44,7 +44,7 @@ mainmodule lulesh {
                 CommDataInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
                              locDom->sizeZ() + 1, true, false, commDataSBN);
                 CommDataInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
-                             locDom->sizeZ(), true, true, commDataQ);
+                             locDom->sizeZ(), true, true, commDataMonoQ);
 
                 Kokkos::View<Real_t*> fieldData;
                 fieldData = locDom.m_nodalMass;
@@ -170,7 +170,7 @@ mainmodule lulesh {
                          domain.sizeZ(), true, true);
 
                 recvRef = MSG_MONOQ | iter;
-                commNbrs = commDataQ.size();
+                commNbrs = commDataMonoQ.size();
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {

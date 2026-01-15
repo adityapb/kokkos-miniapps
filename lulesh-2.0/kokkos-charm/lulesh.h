@@ -69,6 +69,15 @@ public:
   void packingDone(int msgType, int x, int y, int z, int xferFields, 
     int sendCount, int offset);
 
+  void processRemotePosVel(int ref, int x, int y, int z, int xferFields, 
+    int size, Real_t* buf);
+
+  void processRemoteQ(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
+
+  void processRemoteMass(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
+
+  void processRemoteForce(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
+
   Domain *locDom;
   int iter;
   int flatIndex;

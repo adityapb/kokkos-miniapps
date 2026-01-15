@@ -54,8 +54,8 @@
 
 extern "C" void packingDoneCallback(void* param, void* msg) {
    PackingDoneMsg* m = (PackingDoneMsg*) msg;
-   CProxy_DomainChare* proxy = m->proxy;
-   proxy->packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
+   CProxy_DomainChare& proxy = m->proxy;
+   proxy.packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
 }
 
 /******************************************/
@@ -392,10 +392,10 @@ void DomainChare::packingDone(int msgType, int x, int y, int z, int xferFields,
 void DomainChare::CommRecv(int& ref, int& x, int& y, int& z, int& xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post) {
    int msgType = ref >> 29;
    CommDataMap_t* commDataMap;
-   if (msgType == MSG_COMM_POS_VEL)
+   if (msgType == MSG_SYNC_POS_VEL)
       commDataMap = &commDataPosVel;
-   else if (msgType == MSG_COMMQ)
-      commDataMap = &commDataQ;
+   else if (msgType == MSG_MONOQ)
+      commDataMap = &commDataMonoQ;
    else if (msgType == MSG_COMM_SBN)
       commDataMap = &commDataSBN;
    else
@@ -413,7 +413,7 @@ void DomainChare::CommRecv(int& ref, int& x, int& y, int& z, int& xferFields, in
    int cmsg = it->second.cmsg ;
 
    buf = locDom->commDataRecvView.data() + pmsg * maxPlaneComm + emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL;
-   post[0].cuda_stream = commStream;
+   post[0].hapi_stream = commStream;
 }
 
 /******************************************/
