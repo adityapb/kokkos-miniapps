@@ -12,8 +12,21 @@
 #include "lulesh.decl.h"
 #include "hapi.h"
 
-using CommDataMap_t = std::unordered_map<std::tuple<int, int, int>, CommData, std::hash<std::tuple<int, int, int>>>;
-using CommDataMapIter_t = typename CommDataMap_t::iterator;
+struct TupleHash {
+    template <class T1, class T2, class T3>
+    std::size_t operator()(const std::tuple<T1, T2, T3>& v) const {
+        // Use a basic hash-combining strategy
+        auto h1 = std::hash<T1>{}(std::get<0>(v));
+        auto h2 = std::hash<T2>{}(std::get<1>(v));
+        auto h3 = std::hash<T3>{}(std::get<2>(v));
+        
+        // A common way to combine hashes to avoid collisions
+        return h1 ^ (h2 << 1) ^ (h3 << 2); 
+    }
+};
+
+using CommDataMap_t = std::unordered_map<std::tuple<int, int, int>, CommData, TupleHash>;
+using CommDataMapIter_t = CommDataMap_t::iterator;
 
 class KokkosManager : public CBase_KokkosManager {
 public:
