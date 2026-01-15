@@ -59,8 +59,8 @@ public:
     Kokkos::View<Real_t*> *fieldData, Index_t dx, Index_t dy, Index_t dz, 
     bool doSend, bool planeOnly, CommDataMap_t& commDataMap);
 
-  void CommRecv(int& ref, int& x, int& y, int& z, int& xferFields, int& size, 
-    Real_t* &buf, CkDeviceBufferPost* post);
+  //void CommRecv(int& ref, int& x, int& y, int& z, int& xferFields, int& size, 
+  //  Real_t* &buf, CkDeviceBufferPost* post);
 
   Real_t TimeStepCalculateLocal(Domain &domain);
 

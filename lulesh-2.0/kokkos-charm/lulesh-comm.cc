@@ -351,29 +351,31 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       int offsetY = std::get<1>(idx) - thisIndex.y ;
       int offsetZ = std::get<2>(idx) - thisIndex.z ;
 
+      int offset = cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL; 
+
       if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             Kokkos::View<Real_t*> src = fieldData[fi] ;
             Copy2D(src, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
                    domain.commDataSendView, 
-                   cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size, 
-                   cdata.src_stride[0], cdata.src_stride[1], cdata.size);
+                   offset + fi * cdata.size, 
+                   cdata.src_stride[0], cdata.src_stride[1], cdata.size, commSpace);
          }
       } else {
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             Kokkos::View<Real_t*> src = fieldData[fi] ;
             Copy1D(src, cdata.offset, cdata.dst_stride[0],
                    domain.commDataSendView, 
-                   cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size, 
-                   cdata.src_stride[0], cdata.size);
+                   offset + fi * cdata.size, 
+                   cdata.src_stride[0], cdata.size, commSpace);
          }
       }
    
       CkCallback* cb = new CkCallback(
          packingDoneCallback, 
          new PackingDoneMsg(this, msgType, std::get<0>(idx), std::get<1>(idx), 
-            std::get<2>(idx), xferFields, cdata.sendCount, cdata.sendOffset)
+            std::get<2>(idx), xferFields, cdata.size, offset)
       );
       hapiAddCallback(commStream, cb);
    }
