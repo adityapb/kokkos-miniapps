@@ -52,6 +52,14 @@
 
 /******************************************/
 
+extern "C" void packingDoneCallback(void* param, void* msg) {
+   PackingDoneMsg* m = (PackingDoneMsg*) msg;
+   CProxy_DomainChare* proxy = m->proxy;
+   proxy->packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
+}
+
+/******************************************/
+
 void Copy1D(Kokkos::View<Real_t*> src, int src_offset,
    int src_stride,
     Kokkos::View<Real_t*> dest, int dst_offset, int dst_stride,
@@ -370,12 +378,6 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       );
       hapiAddCallback(commStream, cb);
    }
-}
-
-extern "C" void packingDoneCallback(void* param, void* msg) {
-   PackingDoneMsg* m = (PackingDoneMsg*) msg;
-   CProxy_DomainChare* proxy = m->proxy;
-   proxy->packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
 }
 
 void DomainChare::packingDone(int msgType, int x, int y, int z, int xferFields, 

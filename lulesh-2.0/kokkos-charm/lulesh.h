@@ -40,6 +40,8 @@ public:
 };
 
 class DomainChare : public CBase_DomainChare {
+  DomainChare_SDAG_CODE
+
 public:
   DomainChare(CkMigrateMessage *msg) : CBase_DomainChare(msg) {}
 
@@ -49,9 +51,6 @@ public:
               int numChares_);
 
   ~DomainChare() { delete locDom; }
-
-  void init(int numRanks, Index_t nx, int tp, int nr,
-            int balance, int cost, int numChares_);
 
   void CommDataInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz, 
     bool doSend, bool planeOnly, CommDataMap_t &commDataMap);
@@ -87,6 +86,8 @@ public:
 };
 
 class Main : public CBase_Main {
+  Main_SDAG_CODE
+
 public:
   Main(CkArgMsg *m);
 };
