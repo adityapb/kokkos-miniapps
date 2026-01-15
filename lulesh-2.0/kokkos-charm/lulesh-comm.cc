@@ -54,8 +54,7 @@
 
 extern "C" void packingDoneCallback(void* param, void* msg) {
    PackingDoneMsg* m = (PackingDoneMsg*) msg;
-   CProxy_DomainChare& proxy = m->proxy;
-   proxy.packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
+   m->domain->packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
 }
 
 /******************************************/
@@ -373,7 +372,7 @@ void DomainChare::CommSend(Domain& domain, int msgType,
    
       CkCallback* cb = new CkCallback(
          packingDoneCallback, 
-         new PackingDoneMsg(thisProxy, msgType, std::get<0>(idx), std::get<1>(idx), 
+         new PackingDoneMsg(locDom, msgType, std::get<0>(idx), std::get<1>(idx), 
             std::get<2>(idx), xferFields, cdata.sendCount, cdata.sendOffset)
       );
       hapiAddCallback(commStream, cb);
