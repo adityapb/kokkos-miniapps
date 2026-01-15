@@ -105,12 +105,12 @@ class PackingDoneMsg {
 public:
   PackingDoneMsg() {}
 
-  PackingDoneMsg(Domain* domain_, int msgType_, int x_, int y_, int z_,
+  PackingDoneMsg(DomainChare* domain_, int msgType_, int x_, int y_, int z_,
                 int xferFields_, int sendCount_, int offset_)
       : domain(domain_), msgType(msgType_), x(x_), y(y_), z(z_),
         xferFields(xferFields_), sendCount(sendCount_), offset(offset_) {}
 
-  Domain* domain;
+  DomainChare* domain;
   int msgType;
   int x, y, z;
   int xferFields;
