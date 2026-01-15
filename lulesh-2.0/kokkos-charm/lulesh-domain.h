@@ -725,7 +725,12 @@ public:
     dst_stride[1] = dst_stride_1;
   }
 
-  CommData() {}
+  CommData() : pmsg(0), emsg(0), cmsg(0), offset(0), size(0) {
+    src_stride[0] = 0;
+    src_stride[1] = 0;
+    dst_stride[0] = 0;
+    dst_stride[1] = 0;
+  }
 
   int offset;
   int src_stride[2];
