@@ -732,6 +732,30 @@ public:
     dst_stride[1] = 0;
   }
 
+  CommData(const CommData& other) 
+      : pmsg(other.pmsg), emsg(other.emsg), cmsg(other.cmsg),
+        offset(other.offset), size(other.size) {
+    src_stride[0] = other.src_stride[0];
+    src_stride[1] = other.src_stride[1];
+    dst_stride[0] = other.dst_stride[0];
+    dst_stride[1] = other.dst_stride[1];
+  }
+
+  CommData& operator=(const CommData& other) {
+    if (this != &other) {
+      pmsg = other.pmsg;
+      emsg = other.emsg;
+      cmsg = other.cmsg;
+      offset = other.offset;
+      size = other.size;
+      src_stride[0] = other.src_stride[0];
+      src_stride[1] = other.src_stride[1];
+      dst_stride[0] = other.dst_stride[0];
+      dst_stride[1] = other.dst_stride[1];
+    }
+    return *this;
+  }
+
   int offset;
   int src_stride[2];
   int dst_stride[2];
