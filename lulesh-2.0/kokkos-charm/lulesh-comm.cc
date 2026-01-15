@@ -383,7 +383,7 @@ void DomainChare::packingDone(int msgType, int x, int y, int z, int xferFields,
       int sendCount, int offset) {
    int ref = msgType | iter;
    thisProxy(x, y, z).CommRecv(ref, thisIndex.x, thisIndex.y, thisIndex.z, 
-      xferFields, sendCount, domain.commDataSendView.data() + offset);
+      xferFields, sendCount, locDom->commDataSendView.data() + offset);
 }
 
 /******************************************/
@@ -445,7 +445,7 @@ void DomainChare::processRemotePosVel(int ref, int x, int y, int z, int xferFiel
             cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
             cdata.src_stride[0], cdata.src_stride[1],
             dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-            cdata.size
+            cdata.size, commSpace
             );
       }
    } else {
@@ -455,7 +455,7 @@ void DomainChare::processRemotePosVel(int ref, int x, int y, int z, int xferFiel
             cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
             cdata.src_stride[0],
             dest, cdata.offset, cdata.dst_stride[0],
-            cdata.size
+            cdata.size, commSpace
             );
       }
    }
@@ -469,7 +469,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
    Index_t maxPlaneComm = xferFields * domain.maxPlaneSize() ;
    Index_t maxEdgeComm  = xferFields * domain.maxEdgeSize() ;
 
-   CommData commData = commDataQ[{x, y, z}];
+   CommData cdata = commDataMonoQ[{x, y, z}];
    Index_t offsetX = x - thisIndex.x;
    Index_t offsetY = y - thisIndex.y;
    Index_t offsetZ = z - thisIndex.z;
@@ -482,7 +482,6 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
    fieldOffset[0] = domain.numElem() ;
    fieldOffset[1] = domain.numElem() ;
    fieldOffset[2] = domain.numElem() ;
-   int xferFields = 3;
 
    if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
@@ -492,7 +491,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
             cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
             cdata.src_stride[0], cdata.src_stride[1],
             dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-            cdata.size
+            cdata.size, commSpace
             );
       }
    } else {
@@ -502,7 +501,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
             cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
             cdata.src_stride[0],
             dest, cdata.offset, cdata.dst_stride[0],
-            cdata.size
+            cdata.size, commSpace
             );
       }
    }
@@ -531,7 +530,7 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
          Add2D(domain.commDataRecvView, cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
                cdata.src_stride[0], cdata.src_stride[1],
                dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-               cdata.size);
+               cdata.size, commSpace);
       }
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
@@ -539,7 +538,7 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
          Add1D(domain.commDataRecvView, cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
                cdata.src_stride[0],
                dest, cdata.offset, cdata.dst_stride[0],
-               cdata.size);
+               cdata.size, commSpace);
       }
    }
 }
@@ -569,7 +568,7 @@ void DomainChare::processRemoteForce(int ref, int x, int y, int z, int xferField
          Add2D(domain.commDataRecvView, cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
                cdata.src_stride[0], cdata.src_stride[1],
                dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-               cdata.size);
+               cdata.size, commSpace);
       }
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
@@ -577,7 +576,7 @@ void DomainChare::processRemoteForce(int ref, int x, int y, int z, int xferField
          Add1D(domain.commDataRecvView, cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL + fi * cdata.size,
                cdata.src_stride[0],
                dest, cdata.offset, cdata.dst_stride[0],
-               cdata.size);
+               cdata.size, commSpace);
       }
    }
 }
