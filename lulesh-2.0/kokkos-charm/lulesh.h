@@ -6,6 +6,7 @@
 
 //#include "lulesh-domain.h"
 #include "lulesh.decl.h"
+#include "hapi.h"
 
 class KokkosManager : public CBase_KokkosManager {
 public:
@@ -34,6 +35,9 @@ public:
 
   void init(int numRanks, Index_t nx, int tp, int nr,
             int balance, int cost, int numChares_);
+
+  void CommDataInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz, 
+    bool doSend, bool planeOnly, CommDataMap_t &commDataMap);
 
   void CommSend(Domain& domain, int msgType, Index_t xferFields, 
     Kokkos::View<Real_t*> *fieldData, Index_t dx, Index_t dy, Index_t dz, 
