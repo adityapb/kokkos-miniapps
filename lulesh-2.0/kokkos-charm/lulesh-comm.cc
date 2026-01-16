@@ -217,49 +217,49 @@ void DomainChare::CommDataInit(Domain& domain, Index_t dx, Index_t dy, Index_t d
 
       if (colMin && planeMin) {
          commDataMap[{thisIndex.x-1, thisIndex.y, thisIndex.z-1}] = 
-            CommData(pmsg, emsg, cmsg, 0, 1, 0, 1, 0, dy, 1);
+            CommData(pmsg, emsg, cmsg, 0, dx, 0, 1, 0, dy, 1);
          ++emsg ;
       }
 
       if (rowMax && colMax && doSend) {
          commDataMap[{thisIndex.x+1, thisIndex.y+1, thisIndex.z}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), 1, 0, 1, 0, dz, 1);
+            CommData(pmsg, emsg, cmsg, dx*dy - 1, dx*dy, 0, 1, 0, dz, 1);
          ++emsg ;
       }
 
       if (rowMax && planeMax && doSend) {
          commDataMap[{thisIndex.x, thisIndex.y+1, thisIndex.z+1}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), 1, 0, 1, 0, dx, 1);
+            CommData(pmsg, emsg, cmsg, dx*(dy-1) + dx*dy*(dz-1), 1, 0, 1, 0, dx, 1);
          ++emsg ;
       }
 
       if (colMax && planeMax && doSend) {
          commDataMap[{thisIndex.x+1, thisIndex.y, thisIndex.z+1}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), 1, 0, 1, 0, dy, 1);
+            CommData(pmsg, emsg, cmsg, dx*dy*(dz-1) + dx-1, dx, 0, 1, 0, dy, 1);
          ++emsg ;
       }
 
       if (rowMax && colMin && doSend) {
          commDataMap[{thisIndex.x-1, thisIndex.y+1, thisIndex.z}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), 1, 0, 1, 0, dz, 1);
+            CommData(pmsg, emsg, cmsg, dx*(dy - 1), dx*dy, 0, 1, 0, dz, 1);
          ++emsg ;
       }
 
       if (rowMin && planeMax && doSend) {
          commDataMap[{thisIndex.x, thisIndex.y-1, thisIndex.z+1}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), 1, 0, 1, 0, dx, 1);
+            CommData(pmsg, emsg, cmsg, dx*dy*(dz-1), 1, 0, 1, 0, dx, 1);
          ++emsg ;
       }
 
       if (colMin && planeMax && doSend) {
          commDataMap[{thisIndex.x-1, thisIndex.y, thisIndex.z+1}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), 1, 0, 1, 0, dy, 1);
+            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), dx, 0, 1, 0, dy, 1);
          ++emsg ;
       }
 
       if (rowMin && colMax) {
          commDataMap[{thisIndex.x+1, thisIndex.y-1, thisIndex.z}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1), 1, 0, 1, 0, dz, 1);
+            CommData(pmsg, emsg, cmsg, dx-1, dx*dy, 0, 1, 0, dz, 1);
          ++emsg ;
       }
 
@@ -271,7 +271,7 @@ void DomainChare::CommDataInit(Domain& domain, Index_t dx, Index_t dy, Index_t d
 
       if (colMax && planeMin) {
          commDataMap[{thisIndex.x+1, thisIndex.y, thisIndex.z-1}] = 
-            CommData(pmsg, emsg, cmsg, dx - 1, 1, 0, 1, 0, dy, 1);
+            CommData(pmsg, emsg, cmsg, dx - 1, dx, 0, 1, 0, dy, 1);
          ++emsg ;
       }
 
