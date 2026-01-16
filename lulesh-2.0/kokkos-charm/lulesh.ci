@@ -57,7 +57,7 @@ mainmodule lulesh {
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
                 when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
-                        int size, nocopydevice Real_t buf[size]) {
+                        int size, nocopydevice double buf[size]) {
                     serial "processRemoteMass" {
                         processRemoteMass(ref, x, y, z, xferFields, size, buf);
                     }
@@ -114,7 +114,7 @@ mainmodule lulesh {
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
                 when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
-                        int size, nocopydevice Real_t buf[size]) {
+                        int size, nocopydevice double buf[size]) {
                     serial "processRemoteForce" {
                         processRemoteForce(ref, x, y, z, xferFields, size, buf);
                     }
@@ -150,7 +150,7 @@ mainmodule lulesh {
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
                 when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
-                        int size, nocopydevice Real_t buf[size]) {
+                        int size, nocopydevice double buf[size]) {
                     serial "processRemotePosVel" {
                         processRemotePosVel(ref, x, y, z, xferFields, size, buf);
                     }
@@ -175,7 +175,7 @@ mainmodule lulesh {
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
                 when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
-                        int size, nocopydevice Real_t buf[size]) {
+                        int size, nocopydevice double buf[size]) {
                     serial "processRemoteQ" {
                         processRemoteQ(ref, x, y, z, xferFields, size, buf);
                     }
