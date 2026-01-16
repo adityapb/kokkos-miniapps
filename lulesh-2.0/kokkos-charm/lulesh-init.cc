@@ -1,7 +1,4 @@
 #include <math.h>
-#if USE_MPI
-# include <mpi.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -416,12 +413,8 @@ Domain::SetupThreadSupportStructures()
     for (Index_t i=0; i < clSize; ++i) {
       Index_t clv = h_nodeElemCornerList[i] ;
       if ((clv < 0) || (clv > numElem()*8)) {
-	fprintf(stderr,
-		"AllocateNodeElemIndexes(): nodeElemCornerList entry out of range!\n");
-#if USE_MPI
-	MPI_Abort(MPI_COMM_WORLD, -1);
-#else
-	exit(-1);
+	CkAbort("AllocateNodeElemIndexes(): nodeElemCornerList entry out of range!\n");
+      }
 #endif
       }
     }
@@ -499,14 +492,8 @@ Domain::SetupCommBuffers(Int_t edgeNodes)
 void
 Domain::CreateRegionIndexSets(Int_t nr, Int_t balance)
 {
-#if USE_MPI   
-   Index_t myRank;
-   MPI_Comm_rank(MPI_COMM_WORLD, &myRank) ;
-   srand(myRank);
-#else
-   srand(0);
+   srand(CkMyPe()); // FIXME
    Index_t myRank = 0;
-#endif
    this->numReg() = nr;
    m_regElemSize = Allocate<Index_t>(numReg());
    auto row_map = Kokkos::View<Index_t*>("regElemlist::row_map",numReg()+1);
@@ -827,28 +814,13 @@ void InitMeshDecomp(Int_t numRanks, Int_t myRank,
    // Assume cube processor layout for now 
    testProcs = Int_t(cbrt(Real_t(numRanks))+0.5) ;
    if (testProcs*testProcs*testProcs != numRanks) {
-      printf("Num processors must be a cube of an integer (1, 8, 27, ...)\n") ;
-#if USE_MPI      
-      MPI_Abort(MPI_COMM_WORLD, -1) ;
-#else
-      exit(-1);
-#endif
+      CkAbort("Num processors must be a cube of an integer (1, 8, 27, ...)\n") ;
    }
    if (sizeof(Real_t) != 4 && sizeof(Real_t) != 8) {
-      printf("MPI operations only support float and double right now...\n");
-#if USE_MPI      
-      MPI_Abort(MPI_COMM_WORLD, -1) ;
-#else
-      exit(-1);
-#endif
+      CkAbort("MPI operations only support float and double right now...\n") ;
    }
    if (MAX_FIELDS_PER_MPI_COMM > CACHE_COHERENCE_PAD_REAL) {
-      printf("corner element comm buffers too small.  Fix code.\n") ;
-#if USE_MPI      
-      MPI_Abort(MPI_COMM_WORLD, -1) ;
-#else
-      exit(-1);
-#endif
+      CkAbort("corner element comm buffers too small.  Fix code.\n") ;
    }
 
    dx = testProcs ;
@@ -857,12 +829,7 @@ void InitMeshDecomp(Int_t numRanks, Int_t myRank,
 
    // temporary test
    if (dx*dy*dz != numRanks) {
-      printf("error -- must have as many domains as procs\n") ;
-#if USE_MPI      
-      MPI_Abort(MPI_COMM_WORLD, -1) ;
-#else
-      exit(-1);
-#endif
+      CkAbort("error -- must have as many domains as procs\n") ;
    }
    Int_t remainder = dx*dy*dz % numRanks ;
    if (myRank < remainder) {
