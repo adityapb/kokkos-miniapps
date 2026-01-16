@@ -66,6 +66,8 @@ public:
 
   void TimeIncrement(Real_t newdt);
 
+  void CommRecv(int ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post);
+
   void packingDone(int msgType, int x, int y, int z, int xferFields, 
     int sendCount, int offset);
 
