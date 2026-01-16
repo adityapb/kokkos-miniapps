@@ -35,7 +35,7 @@ mainmodule lulesh {
             int its_, int viz_, int do_atomic_, 
             int numChares_);
 
-        entry void init(int numRanks, Index_t nx, int tp, int nr,
+        entry void init(int numRanks, Index_t nx, int nr,
                           int balance, int cost, int numChares_) {
             serial "NodalMassComm" {
                 // setup commData maps
@@ -192,7 +192,7 @@ mainmodule lulesh {
 
                 ApplyMaterialPropertiesForElems(domain, computeSpace);
 
-                UpdateVolumesForElems(domain, domain.v_cut(), numElem, computeSpace);
+                UpdateVolumesForElems(domain, domain.v_cut(), domain.numElem(), computeSpace);
 
                 CalcTimeConstraintsForElems(domain, computeSpace);
 
