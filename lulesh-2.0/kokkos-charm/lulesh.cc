@@ -1913,7 +1913,7 @@ static inline void CalcTimeConstraintsForElems(Domain &domain, ExecSpace execSpa
   }
 }
 
-void Main::Main(CkArgMsg* m) {
+Main::Main(CkArgMsg* m) {
   Int_t numRanks;
   Int_t myRank;
   struct cmdLineOpts opts;

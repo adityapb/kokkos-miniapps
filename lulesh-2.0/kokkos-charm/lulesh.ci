@@ -47,9 +47,9 @@ mainmodule lulesh {
                              locDom->sizeZ(), true, true, commDataMonoQ);
 
                 Kokkos::View<Real_t*> fieldData;
-                fieldData = locDom.m_nodalMass;
+                fieldData = locDom->m_nodalMass;
                 CommSend(*locDom, MSG_COMM_SBN, 1, &fieldData, locDom->sizeX() + 1,
-                         locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false);
+                         locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSBN);
 
                 recvRef = MSG_COMM_SBN | iter;
                 commNbrs = commDataSBN.size();
@@ -65,7 +65,7 @@ mainmodule lulesh {
             }
             
             serial {
-                CkCallback cb(CkIndex_Main::initDone(NULL), mainProxy);
+                CkCallback cb(CkIndex_Main::initDone(), mainProxy);
                 contribute(cb);
             }
         };
@@ -106,7 +106,7 @@ mainmodule lulesh {
                 fieldData[1] = domain.m_fy;
                 fieldData[2] = domain.m_fz;
                 CommSend(domain, MSG_COMM_SBN, 3, fieldData, domain.sizeX() + 1,
-                         domain.sizeY() + 1, domain.sizeZ() + 1, true, false);
+                         domain.sizeY() + 1, domain.sizeZ() + 1, true, false, commDataSBN);
                 
                 recvRef = MSG_COMM_SBN | iter;
                 commNbrs = commDataSBN.size();
@@ -134,7 +134,7 @@ mainmodule lulesh {
 
                 CalcPositionForNodes(domain, delt, domain.numNode(), computeSpace);
 
-                Kokkos::View<Real_t> fieldData[6];
+                Kokkos::View<Real_t*> fieldData[6];
                 fieldData[0] = domain.m_x;
                 fieldData[1] = domain.m_y;
                 fieldData[2] = domain.m_z;
@@ -142,7 +142,7 @@ mainmodule lulesh {
                 fieldData[4] = domain.m_yd;
                 fieldData[5] = domain.m_zd;
                 CommSend(domain, MSG_SYNC_POS_VEL, 6, fieldData, domain.sizeX() + 1,
-                         domain.sizeY() + 1, domain.sizeZ() + 1, false, false);
+                         domain.sizeY() + 1, domain.sizeZ() + 1, false, false, commDataPosVel);
 
                 recvRef = MSG_SYNC_POS_VEL | iter;
                 commNbrs = commDataPosVel.size();
@@ -167,7 +167,7 @@ mainmodule lulesh {
                 fieldData[1] = domain.m_delv_eta;
                 fieldData[2] = domain.m_delv_zeta;
                 CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
-                         domain.sizeZ(), true, true);
+                         domain.sizeZ(), true, true, commDataMonoQ);
 
                 recvRef = MSG_MONOQ | iter;
                 commNbrs = commDataMonoQ.size();
@@ -212,7 +212,7 @@ mainmodule lulesh {
                 if ((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its))
                     thisProxy[thisIndex].run();
                 else {
-                    CkCallback cb(CkIndex_Main::done(NULL), mainProxy);
+                    CkCallback cb(CkIndex_Main::done(), mainProxy);
                     contribute(cb);
                 }
             }

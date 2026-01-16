@@ -101,6 +101,8 @@ class Main : public CBase_Main {
 
 public:
   Main(CkArgMsg *m);
+
+  double start;
 };
 
 class PackingDoneMsg {
