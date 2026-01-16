@@ -413,9 +413,7 @@ Domain::SetupThreadSupportStructures()
     for (Index_t i=0; i < clSize; ++i) {
       Index_t clv = h_nodeElemCornerList[i] ;
       if ((clv < 0) || (clv > numElem()*8)) {
-	CkAbort("AllocateNodeElemIndexes(): nodeElemCornerList entry out of range!\n");
-      }
-#endif
+	      CkAbort("AllocateNodeElemIndexes(): nodeElemCornerList entry out of range!\n");
       }
     }
     Kokkos::deep_copy(m_nodeElemCornerList, h_nodeElemCornerList);
