@@ -448,7 +448,6 @@ Domain::SetupCommBuffers(Int_t edgeNodes)
   m_planeMin = (m_planeLoc == 0)    ? 0 : 1;
   m_planeMax = (m_planeLoc == m_tp-1) ? 0 : 1;
 
-#if USE_MPI   
   // account for face communication 
   Index_t comBufSize =
     (m_rowMin + m_rowMax + m_colMin + m_colMax + m_planeMin + m_planeMax) *
@@ -485,7 +484,6 @@ Domain::SetupCommBuffers(Int_t edgeNodes)
   // prevent floating point exceptions 
   //memset(this->commDataSend, 0, comBufSize*sizeof(Real_t)) ;
   //memset(this->commDataRecv, 0, comBufSize*sizeof(Real_t)) ;
-#endif   
 
   // Boundary nodesets
   if (m_colLoc == 0)
