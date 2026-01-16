@@ -360,10 +360,10 @@ void DomainChare::CommSend(Domain& domain, int msgType,
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             CkPrintf("2D copy offsetX=%d offsetY=%d offsetZ=%d\n", offsetX, offsetY, offsetZ);
             Kokkos::View<Real_t*> src = fieldData[fi] ;
-            Copy2D(src, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
+            Copy2D(src, cdata.offset, cdata.src_stride[0], cdata.src_stride[1],
                    domain.commDataSendView, 
                    offset + fi * cdata.size[0] * cdata.size[1], 
-                   cdata.src_stride[0], cdata.src_stride[1], 
+                   cdata.dst_stride[0], cdata.dst_stride[1], 
                    cdata.size[0], cdata.size[1], commSpace);
          }
       } else {
@@ -373,10 +373,10 @@ void DomainChare::CommSend(Domain& domain, int msgType,
              offset);
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             Kokkos::View<Real_t*> src = fieldData[fi] ;
-            Copy1D(src, cdata.offset, cdata.dst_stride[0],
+            Copy1D(src, cdata.offset, cdata.src_stride[0],
                    domain.commDataSendView, 
                    offset + fi * cdata.size[0], 
-                   cdata.src_stride[0], cdata.size[0], commSpace);
+                   cdata.dst_stride[0], cdata.size[0], commSpace);
          }
       }
    
