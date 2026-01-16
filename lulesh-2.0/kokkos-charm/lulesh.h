@@ -30,6 +30,10 @@ using CommDataMapIter_t = CommDataMap_t::iterator;
 
 class KokkosManager : public CBase_KokkosManager {
 public:
+  KokkosManager() : CBase_KokkosManager() {
+    Kokkos::initialize();
+  }
+
   KokkosManager(CkMigrateMessage *msg) : CBase_KokkosManager(msg) {
     Kokkos::initialize();
   }
