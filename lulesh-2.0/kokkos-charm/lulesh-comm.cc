@@ -391,7 +391,7 @@ void DomainChare::packingDone(int msgType, int x, int y, int z, int xferFields,
 
 /******************************************/
 
-void DomainChare::CommRecv(int& ref, int& x, int& y, int& z, int& xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post) {
+void DomainChare::CommRecv(int ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post) {
    int msgType = ref >> 29;
    CommDataMap_t* commDataMap;
    if (msgType == MSG_SYNC_POS_VEL)
