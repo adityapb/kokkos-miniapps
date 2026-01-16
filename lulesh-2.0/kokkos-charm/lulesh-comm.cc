@@ -386,7 +386,7 @@ void DomainChare::packingDone(int msgType, int x, int y, int z, int xferFields,
       int sendCount, int offset) {
    int ref = msgType | iter;
    thisProxy(x, y, z).CommRecv(ref, thisIndex.x, thisIndex.y, thisIndex.z, 
-      xferFields, sendCount, locDom->commDataSendView.data() + offset);
+      xferFields, sendCount, CkDeviceBuffer(locDom->commDataSendView.data() + offset, commStream));
 }
 
 /******************************************/
