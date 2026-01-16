@@ -715,30 +715,35 @@ public:
   CommData(int pmsg_, int emsg_, int cmsg_, int offset_,
            int src_stride_0, int src_stride_1,
            int dst_stride_0, int dst_stride_1,
-           int size_)
+           int size_0, int size_1)
       : pmsg(pmsg_), emsg(emsg_), cmsg(cmsg_), 
-        offset(offset_),
-        size(size_) {
+        offset(offset_) {
     src_stride[0] = src_stride_0;
     src_stride[1] = src_stride_1;
     dst_stride[0] = dst_stride_0;
     dst_stride[1] = dst_stride_1;
+    size[0] = size_0;
+    size[1] = size_1;
   }
 
-  CommData() : pmsg(0), emsg(0), cmsg(0), offset(0), size(0) {
+  CommData() : pmsg(0), emsg(0), cmsg(0), offset(0) {
     src_stride[0] = 0;
     src_stride[1] = 0;
     dst_stride[0] = 0;
     dst_stride[1] = 0;
+    size[0] = 0;
+    size[1] = 0;
   }
 
   CommData(const CommData& other) 
       : pmsg(other.pmsg), emsg(other.emsg), cmsg(other.cmsg),
-        offset(other.offset), size(other.size) {
+        offset(other.offset) {
     src_stride[0] = other.src_stride[0];
     src_stride[1] = other.src_stride[1];
     dst_stride[0] = other.dst_stride[0];
     dst_stride[1] = other.dst_stride[1];
+    size[0] = other.size[0];
+    size[1] = other.size[1];
   }
 
   CommData& operator=(const CommData& other) {
@@ -747,11 +752,12 @@ public:
       emsg = other.emsg;
       cmsg = other.cmsg;
       offset = other.offset;
-      size = other.size;
       src_stride[0] = other.src_stride[0];
       src_stride[1] = other.src_stride[1];
       dst_stride[0] = other.dst_stride[0];
       dst_stride[1] = other.dst_stride[1];
+      size[0] = other.size[0];
+      size[1] = other.size[1];
     }
     return *this;
   }
@@ -759,7 +765,7 @@ public:
   int offset;
   int src_stride[2];
   int dst_stride[2];
-  int size;
+  int size[2];
   int pmsg, emsg, cmsg;
 };
 
