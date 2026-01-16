@@ -376,7 +376,7 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       CkCallback* cb = new CkCallback(
          packingDoneCallback, 
          new PackingDoneMsg(this, msgType, std::get<0>(idx), std::get<1>(idx), 
-            std::get<2>(idx), xferFields, cdata.size, offset)
+            std::get<2>(idx), xferFields, cdata.size[0] * cdata.size[1], offset)
       );
       hapiAddCallback(commStream, cb);
    }
