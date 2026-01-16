@@ -653,8 +653,8 @@ static inline void CalcFBHourglassForceForElems(Domain &domain, Real_t *determ,
     int team_size = 1;
     if(Kokkos::DefaultExecutionSpace().concurrency()>1024) team_size = 128;
 
-     Kokkos::parallel_for ("CalcFBHourglassForceForElems B",Kokkos::TeamPolicy<execSpace>((numNode+127)/128,team_size,2),
-        KOKKOS_LAMBDA (const typename Kokkos::TeamPolicy<execSpace>::member_type& team)
+     Kokkos::parallel_for ("CalcFBHourglassForceForElems B",Kokkos::TeamPolicy<ExecSpace>(execSpace, (numNode+127)/128,team_size,2),
+        KOKKOS_LAMBDA (const typename Kokkos::TeamPolicy<ExecSpace>::member_type& team)
      {
        const Index_t gnode_begin = team.league_rank()*128;
        const Index_t gnode_end = (gnode_begin + 128<numNode)?gnode_begin + 128:numNode;
