@@ -1897,6 +1897,20 @@ static inline void CalcHydroConstraintForElems(Domain &domain, Index_t length,
   return;
 }
 
+static inline void CheckQStop(Domain &domain, ExecSpace execSpace) {
+  Index_t idx = 0;
+  Kokkos::parallel_reduce(RangePolicy(execSpace, 0, numElem), 
+      KOKKOS_LAMBDA (const Index_t& i, Index_t& count) {
+      if ( domain.q(i) > domain.qstop() ) {
+          count++ ;
+      }
+  }, idx);
+
+  if (idx > 0) {
+      CkAbort("QStopError");
+  }
+}
+
 static inline void CalcTimeConstraintsForElems(Domain &domain, ExecSpace execSpace) {
 
   domain.dtcourant() = 1.0e+20;

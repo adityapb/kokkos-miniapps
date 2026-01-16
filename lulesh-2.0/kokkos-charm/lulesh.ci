@@ -188,17 +188,7 @@ mainmodule lulesh {
 
                 domain.DeallocateGradients();
 
-                Index_t idx = 0;
-                Kokkos::parallel_reduce(RangePolicy(computeSpace, 0, numElem), 
-                    KOKKOS_LAMBDA (const Index_t& i, Index_t& count) {
-                    if ( domain.q(i) > domain.qstop() ) {
-                        count++ ;
-                    }
-                }, idx);
-
-                if (idx > 0) {
-                    CkAbort("QStopError");
-                }
+                CheckQStop(domain, computeSpace);
 
                 ApplyMaterialPropertiesForElems(domain, computeSpace);
 
