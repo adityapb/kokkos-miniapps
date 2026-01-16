@@ -1955,18 +1955,18 @@ Main::Main(CkArgMsg* m) {
   if(opts.do_atomic == 1) do_atomic = 1;
   else do_atomic = 0;
 
-  if ((myRank == 0) && (opts.quiet == 0)) {
-    printf("Running problem size %d^3 per domain until completion\n", opts.nx);
-    printf("Num processors: %d\n", numRanks);
-    printf("Total number of elements: %lld\n\n",
+  if (opts.quiet == 0) {
+    CkPrintf("Running problem size %d^3 per domain until completion\n", opts.nx);
+    CkPrintf("Num processors: %d\n", numRanks);
+    CkPrintf("Total number of elements: %lld\n\n",
            (long long int)(numRanks * opts.nx * opts.nx * opts.nx));
-    printf("To run other sizes, use -s <integer>.\n");
-    printf("To run a fixed number of iterations, use -i <integer>.\n");
-    printf("To run a more or less balanced region set, use -b <integer>.\n");
-    printf("To change the relative costs of regions, use -c <integer>.\n");
-    printf("To print out progress, use -p\n");
-    printf("To write an output file for VisIt, use -v\n");
-    printf("See help (-h) for more options\n\n");
+    CkPrintf("To run other sizes, use -s <integer>.\n");
+    CkPrintf("To run a fixed number of iterations, use -i <integer>.\n");
+    CkPrintf("To run a more or less balanced region set, use -b <integer>.\n");
+    CkPrintf("To change the relative costs of regions, use -c <integer>.\n");
+    CkPrintf("To print out progress, use -p\n");
+    CkPrintf("To write an output file for VisIt, use -v\n");
+    CkPrintf("See help (-h) for more options\n\n");
   }
 
   kokkosProxy = CProxy_KokkosManager::ckNew();
