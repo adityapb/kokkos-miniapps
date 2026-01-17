@@ -100,6 +100,18 @@ public:
   ExecSpace commSpace, computeSpace;
 };
 
+class PackingDoneMsg : CMessage_PackingDoneMsg {
+public:
+  int msgType;
+  int x, y, z;
+  int xferFields, sendCount, offset;
+
+  PackingDoneMsg(int msgType_, int x_, int y_, int z_,
+                 int xferFields_, int sendCount_, int offset_)
+      : msgType(msgType_), x(x_), y(y_), z(z_),
+        xferFields(xferFields_), sendCount(sendCount_), offset(offset_) {}
+};
+
 class Main : public CBase_Main {
   Main_SDAG_CODE
 

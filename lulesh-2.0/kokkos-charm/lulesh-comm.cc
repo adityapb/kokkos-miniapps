@@ -379,13 +379,13 @@ void DomainChare::CommSend(Domain& domain, int msgType,
                    cdata.dst_stride[0], cdata.size[0], commSpace);
          }
       }
-   
-      CkCallback* cb = new CkCallback(
-         packingDoneCallback, 
-         new PackingDoneMsg(this, msgType, std::get<0>(idx), std::get<1>(idx), 
-            std::get<2>(idx), xferFields, cdata.size[0] * cdata.size[1], offset)
-      );
-      //hapiAddCallback(commStream, cb);
+      
+      CkCallack* cb = new CkCallback(CkIndex_DomainChare::packingDone(NULL), thisProxy[thisIndex]);
+      PackingDoneMsg* msg = new PackingDoneMsg(this, msgType,
+         std::get<0>(idx), std::get<1>(idx), std::get<2>(idx),
+         xferFields, cdata.size[0], offset);
+      
+      hapiAddCallback(commStream, cb, msg);
    }
 }
 

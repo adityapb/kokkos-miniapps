@@ -5,6 +5,8 @@ mainmodule lulesh {
     readonly CProxy_KokkosManager kokkosProxy;
     readonly CProxy_DomainChare domainProxy;
 
+    message PackingDoneMsg;
+
     mainchare Main {
         entry Main(CkArgMsg* m);
 
@@ -69,6 +71,8 @@ mainmodule lulesh {
                 contribute(cb);
             }
         };
+
+        entry void packingDone(int msgType, int x, int y, int z, int xferFields, int sendCount, int offset);
         
         entry [reductiontarget] void TimeStepUpdate(Real_t newdt);
 
