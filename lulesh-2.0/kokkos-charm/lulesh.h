@@ -121,20 +121,4 @@ public:
   double start;
 };
 
-class PackingDoneMsg {
-public:
-  PackingDoneMsg() {}
-
-  PackingDoneMsg(DomainChare* domain_, int msgType_, int x_, int y_, int z_,
-                int xferFields_, int sendCount_, int offset_)
-      : domain(domain_), msgType(msgType_), x(x_), y(y_), z(z_),
-        xferFields(xferFields_), sendCount(sendCount_), offset(offset_) {}
-
-  DomainChare* domain;
-  int msgType;
-  int x, y, z;
-  int xferFields;
-  int sendCount, offset;
-};
-
 #endif // LULESH_H
