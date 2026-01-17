@@ -99,7 +99,7 @@ public:
   ExecSpace commSpace, computeSpace;
 };
 
-class PackingDoneMsg : CMessage_PackingDoneMsg {
+class PackingDoneMsg : public CMessage_PackingDoneMsg {
 public:
   int msgType;
   int x, y, z;
