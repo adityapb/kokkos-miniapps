@@ -52,10 +52,10 @@
 
 /******************************************/
 
-extern "C" void packingDoneCallback(void* param, void* msg) {
-   PackingDoneMsg* m = (PackingDoneMsg*) msg;
-   m->domain->packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
-}
+// extern "C" void packingDoneCallback(void* param, void* msg) {
+//    PackingDoneMsg* m = (PackingDoneMsg*) msg;
+//    m->domain->packingDone(m->msgType, m->x, m->y, m->z, m->xferFields, m->sendCount, m->offset);
+// }
 
 /******************************************/
 
