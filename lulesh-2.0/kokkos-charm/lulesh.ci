@@ -72,7 +72,7 @@ mainmodule lulesh {
             }
         };
 
-        entry void packingDone(int msgType, int x, int y, int z, int xferFields, int sendCount, int offset);
+        entry void packingDone(PackingDoneMsg* msg);
         
         entry [reductiontarget] void TimeStepUpdate(Real_t newdt);
 

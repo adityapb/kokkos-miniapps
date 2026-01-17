@@ -389,11 +389,10 @@ void DomainChare::CommSend(Domain& domain, int msgType,
    }
 }
 
-void DomainChare::packingDone(int msgType, int x, int y, int z, int xferFields, 
-      int sendCount, int offset) {
-   int ref = msgType | iter;
-   thisProxy(x, y, z).CommRecv(ref, thisIndex.x, thisIndex.y, thisIndex.z, 
-      xferFields, sendCount, CkDeviceBuffer(locDom->commDataSendView.data() + offset, commStream));
+void DomainChare::packingDone(PackingDoneMsg* msg) {
+   int ref = msg->msgType | iter;
+   thisProxy(msg->x, msg->y, msg->z).CommRecv(ref, thisIndex.x, thisIndex.y, thisIndex.z, 
+      msg->xferFields, msg->sendCount, CkDeviceBuffer(locDom->commDataSendView.data() + msg->offset, commStream));
 }
 
 /******************************************/

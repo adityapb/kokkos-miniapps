@@ -72,8 +72,7 @@ public:
 
   void CommRecv(int ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post);
 
-  void packingDone(int msgType, int x, int y, int z, int xferFields, 
-    int sendCount, int offset);
+  void packingDone(PackingDoneMsg* msg);
 
   void processRemotePosVel(int ref, int x, int y, int z, int xferFields, 
     int size, Real_t* buf);
