@@ -381,9 +381,9 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       }
       
       CkCallback* cb = new CkCallback(CkIndex_DomainChare::packingDone(NULL), thisProxy[thisIndex]);
-      PackingDoneMsg* msg = new PackingDoneMsg(this, msgType,
+      PackingDoneMsg* msg = new PackingDoneMsg(msgType,
          std::get<0>(idx), std::get<1>(idx), std::get<2>(idx),
-         xferFields, cdata.size[0], offset);
+         xferFields, cdata.size[0] * cdata.size[1], offset);
       
       hapiAddCallback(commStream, cb, msg);
    }
