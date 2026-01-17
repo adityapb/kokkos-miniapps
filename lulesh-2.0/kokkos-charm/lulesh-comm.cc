@@ -380,7 +380,7 @@ void DomainChare::CommSend(Domain& domain, int msgType,
          }
       }
       
-      CkCallack* cb = new CkCallback(CkIndex_DomainChare::packingDone(NULL), thisProxy[thisIndex]);
+      CkCallback* cb = new CkCallback(CkIndex_DomainChare::packingDone(NULL), thisProxy[thisIndex]);
       PackingDoneMsg* msg = new PackingDoneMsg(this, msgType,
          std::get<0>(idx), std::get<1>(idx), std::get<2>(idx),
          xferFields, cdata.size[0], offset);
