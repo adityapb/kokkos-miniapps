@@ -88,7 +88,7 @@ mainmodule lulesh {
 
                 Real_t gnewdt = TimeStepCalculateLocal(*locDom);
 
-                CkCallback cb(CkIndex_DomainChare::TimeStepUpdate(NULL), thisProxy);
+                CkCallback cb(CkReductionTarget(DomainChare, TimeStepUpdate), thisProxy);
                 if (sizeof(Real_t) == 4)
                     contribute(sizeof(Real_t), &gnewdt, CkReduction::min_float, cb);
                 else
@@ -203,9 +203,9 @@ mainmodule lulesh {
                 iter++;
 
                 // run next iteration
-                if ((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its))
+                if ((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its)) {
                     thisProxy[thisIndex].run();
-                else {
+                } else {
                     CkCallback cb(CkIndex_Main::done(), mainProxy);
                     contribute(cb);
                 }
