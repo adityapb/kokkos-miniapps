@@ -398,7 +398,7 @@ void DomainChare::packingDone(PackingDoneMsg* msg) {
 /******************************************/
 
 void DomainChare::CommRecv(int ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post) {
-   int msgType = ref >> 29;
+   int msgType = ref & (((1 << 3) - 1) << 29);
    CommDataMap_t* commDataMap;
    if (msgType == MSG_SYNC_POS_VEL)
       commDataMap = &commDataPosVel;
