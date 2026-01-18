@@ -213,7 +213,7 @@ mainmodule lulesh {
                 if ((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its)) {
                     thisProxy[thisIndex].run();
                 } else {
-                    CkCallback cb(CkIndex_Main::done(), mainProxy);
+                    CkCallback cb(CkReductionTarget(Main, done), mainProxy);
                     contribute(cb);
                 }
             }

@@ -1966,6 +1966,7 @@ Main::Main(CkArgMsg* m) {
     CkPrintf("To change the relative costs of regions, use -c <integer>.\n");
     CkPrintf("To print out progress, use -p\n");
     CkPrintf("To write an output file for VisIt, use -v\n");
+    CkPrintf("To change overdecomposition factor, use -o <integer>.\n");
     CkPrintf("See help (-h) for more options\n\n");
   }
 
