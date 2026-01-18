@@ -340,8 +340,8 @@ void CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz,
       return ;
 
    /* post recieve buffers for all incoming messages */
-   Index_t maxPlaneComm = xferFields * domain.maxPlaneSize() ;
-   Index_t maxEdgeComm  = xferFields * domain.maxEdgeSize() ;
+   Index_t maxPlaneComm =  domain.maxPlaneSize() ;
+   Index_t maxEdgeComm  = domain.maxEdgeSize() ;
    Index_t pmsg = 0 ; /* plane comm msg */
    Index_t emsg = 0 ; /* edge comm msg */
    Index_t cmsg = 0 ; /* corner comm msg */
