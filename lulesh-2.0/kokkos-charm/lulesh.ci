@@ -117,10 +117,10 @@ mainmodule lulesh {
                 fieldData[1] = domain.m_fy;
                 fieldData[2] = domain.m_fz;
                 CommSend(domain, MSG_COMM_SBN, 3, fieldData, domain.sizeX() + 1,
-                         domain.sizeY() + 1, domain.sizeZ() + 1, true, false, commDataSBN);
+                         domain.sizeY() + 1, domain.sizeZ() + 1, true, false, commDataSendSBN);
                 
                 recvRef = MSG_COMM_SBN | iter;
-                commNbrs = commDataSBN.size();
+                commNbrs = commDataSendSBN.size();
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
@@ -153,10 +153,10 @@ mainmodule lulesh {
                 fieldData[4] = domain.m_yd;
                 fieldData[5] = domain.m_zd;
                 CommSend(domain, MSG_SYNC_POS_VEL, 6, fieldData, domain.sizeX() + 1,
-                         domain.sizeY() + 1, domain.sizeZ() + 1, false, false, commDataPosVel);
+                         domain.sizeY() + 1, domain.sizeZ() + 1, false, false, commDataSendPosVel);
 
                 recvRef = MSG_SYNC_POS_VEL | iter;
-                commNbrs = commDataPosVel.size();
+                commNbrs = commDataSendPosVel.size();
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
@@ -178,10 +178,10 @@ mainmodule lulesh {
                 fieldData[1] = domain.m_delv_eta;
                 fieldData[2] = domain.m_delv_zeta;
                 CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
-                         domain.sizeZ(), true, true, commDataMonoQ);
+                         domain.sizeZ(), true, true, commDataSendMonoQ);
 
                 recvRef = MSG_MONOQ | iter;
-                commNbrs = commDataMonoQ.size();
+                commNbrs = commDataSendMonoQ.size();
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
