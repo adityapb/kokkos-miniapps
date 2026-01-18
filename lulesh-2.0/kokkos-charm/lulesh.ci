@@ -41,20 +41,27 @@ mainmodule lulesh {
                           int balance, int cost, int numChares_) {
             serial "NodalMassComm" {
                 // setup commData maps
-                CommDataInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
-                             locDom->sizeZ() + 1, false, false, commDataPosVel);
-                CommDataInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
-                             locDom->sizeZ() + 1, true, false, commDataSBN);
-                CommDataInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
-                             locDom->sizeZ(), true, true, commDataMonoQ);
+                CommDataSendInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
+                             locDom->sizeZ() + 1, false, false, commDataSendPosVel);
+                CommDataSendInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
+                             locDom->sizeZ() + 1, true, false, commDataSendSBN);
+                CommDataSendInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
+                             locDom->sizeZ(), true, true, commDataSendMonoQ);
+
+                CommDataRecvInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
+                             locDom->sizeZ() + 1, false, false, commDataRecvPosVel);
+                CommDataRecvInit(*locDom, locDom->sizeX() + 1, locDom->sizeY() + 1, 
+                             locDom->sizeZ() + 1, true, false, commDataRecvSBN);
+                CommDataRecvInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
+                             locDom->sizeZ(), true, true, commDataRecvMonoQ);
 
                 Kokkos::View<Real_t*> fieldData;
                 fieldData = locDom->m_nodalMass;
                 CommSend(*locDom, MSG_COMM_SBN, 1, &fieldData, locDom->sizeX() + 1,
-                         locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSBN);
+                         locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSendSBN);
 
                 recvRef = MSG_COMM_SBN | iter;
-                commNbrs = commDataSBN.size();
+                commNbrs = commDataSendSBN.size();
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {

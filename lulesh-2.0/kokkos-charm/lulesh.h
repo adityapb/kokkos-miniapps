@@ -56,8 +56,11 @@ public:
 
   ~DomainChare() { delete locDom; }
 
-  void CommDataInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz, 
+  void CommDataSendInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz, 
     bool doSend, bool planeOnly, CommDataMap_t &commDataMap);
+
+  void CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz, 
+    bool doRecv, bool planeOnly, CommDataMap_t &commDataMap);
 
   void CommSend(Domain& domain, int msgType, Index_t xferFields, 
     Kokkos::View<Real_t*> *fieldData, Index_t dx, Index_t dy, Index_t dz, 
@@ -91,9 +94,13 @@ public:
   int recvRef;
   struct cmdLineOpts opts;
 
-  CommDataMap_t commDataPosVel;
-  CommDataMap_t commDataMonoQ;
-  CommDataMap_t commDataSBN;
+  CommDataMap_t commDataSendPosVel;
+  CommDataMap_t commDataSendMonoQ;
+  CommDataMap_t commDataSendSBN;
+
+  CommDataMap_t commDataRecvPosVel;
+  CommDataMap_t commDataRecvMonoQ;
+  CommDataMap_t commDataRecvSBN;
 
   hapiStream_t commStream, computeStream;
   ExecSpace commSpace, computeSpace;
