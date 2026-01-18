@@ -333,7 +333,7 @@ void DomainChare::CommDataSendInit(Domain& domain, Index_t dx, Index_t dy, Index
    }
 }
 
-void CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz, 
+void DomainChare::CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index_t dz, 
                       bool doRecv, bool planeOnly, CommDataMap_t &commDataMap) {
 
    if (domain.numRanks() == 1)
