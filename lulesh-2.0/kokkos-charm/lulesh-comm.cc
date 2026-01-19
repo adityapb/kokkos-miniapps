@@ -679,6 +679,9 @@ void DomainChare::processRemotePosVel(int ref, int x, int y, int z, int xferFiel
 void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
    Domain& domain = *locDom;
 
+   CkPrintf("processRemoteQ: ref=%d from (%d,%d,%d) to (%d,%d,%d) xferFields=%d size=%d\n", 
+      ref, x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields, size);
+
    Index_t maxPlaneComm = xferFields * domain.maxPlaneSize() ;
    Index_t maxEdgeComm  = xferFields * domain.maxEdgeSize() ;
 
