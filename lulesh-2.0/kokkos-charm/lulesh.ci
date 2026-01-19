@@ -121,6 +121,7 @@ mainmodule lulesh {
                 
                 recvRef = MSG_COMM_SBN | iter;
                 commNbrs = commDataSendSBN.size();
+                CkPrintf("SBN num nbrs = %d\n", commNbrs);
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
@@ -157,6 +158,7 @@ mainmodule lulesh {
 
                 recvRef = MSG_SYNC_POS_VEL | iter;
                 commNbrs = commDataSendPosVel.size();
+                CkPrintf("PosVel num nbrs = %d\n", commNbrs);
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
@@ -183,6 +185,7 @@ mainmodule lulesh {
 
                 recvRef = MSG_MONOQ | iter;
                 commNbrs = commDataSendMonoQ.size();
+                CkPrintf("Q num nbrs = %d\n", commNbrs);
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
