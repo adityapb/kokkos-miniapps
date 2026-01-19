@@ -702,6 +702,8 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
          Kokkos::View<Real_t*> &dest = fieldData[fi] ;
+         if (dest.data() == nullptr)
+            CkPrintf("processRemoteQ: dest fieldData[%d] is null\n", fi);
          Copy2D(domain.commDataRecvView, 
             offset + fi * cdata.size[0] * cdata.size[1],
             cdata.src_stride[0], cdata.src_stride[1],
@@ -712,6 +714,8 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
          Kokkos::View<Real_t*> &dest = fieldData[fi] ;
+         if (dest.data() == nullptr)
+            CkPrintf("processRemoteQ: dest fieldData[%d] is null\n", fi);
          Copy1D(domain.commDataRecvView, 
             offset + fi * cdata.size[0],
             cdata.src_stride[0],
