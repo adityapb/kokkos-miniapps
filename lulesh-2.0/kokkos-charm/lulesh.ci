@@ -189,6 +189,8 @@ mainmodule lulesh {
                 when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
                         int size, nocopydevice Real_t buf[size]) {
                     serial "processRemoteQ" {
+                        CkPrintf("DomainChare::CommRecv: ref=%d from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 
+                            ref, x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields);
                         processRemoteQ(ref, x, y, z, xferFields, size, buf);
                     }
                 }
