@@ -211,6 +211,9 @@ public:
   }
 
   void AllocateGradients(Int_t numElem, Int_t allElem) {
+
+    CkPrintf("[%d] Allocating gradients: numElem=%d allElem=%d\n", CkMyPe(), numElem, allElem) ;
+
     // Position gradients
     Kokkos::resize(m_delx_xi,numElem);
     Kokkos::resize(m_delx_eta,numElem);
