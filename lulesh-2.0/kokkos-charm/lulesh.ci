@@ -177,6 +177,7 @@ mainmodule lulesh {
                 fieldData[0] = domain.m_delv_xi;
                 fieldData[1] = domain.m_delv_eta;
                 fieldData[2] = domain.m_delv_zeta;
+                CkPrintf("SENDING Q\n");
                 CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
                          domain.sizeZ(), true, true, commDataSendMonoQ);
 
