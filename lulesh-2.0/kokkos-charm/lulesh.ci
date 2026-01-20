@@ -61,7 +61,7 @@ mainmodule lulesh {
                          locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSendSBN);
 
                 recvRef = MSG_COMM_SBN | iter;
-                commNbrs = commDataSendSBN.size();
+                commNbrs = commDataRecvSBN.size();
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
@@ -120,7 +120,7 @@ mainmodule lulesh {
                          domain.sizeY() + 1, domain.sizeZ() + 1, true, false, commDataSendSBN);
                 
                 recvRef = MSG_COMM_SBN | iter;
-                commNbrs = commDataSendSBN.size();
+                commNbrs = commDataRecvSBN.size();
                 CkPrintf("SBN num nbrs = %d\n", commNbrs);
             }
 
@@ -157,7 +157,7 @@ mainmodule lulesh {
                          domain.sizeY() + 1, domain.sizeZ() + 1, false, false, commDataSendPosVel);
 
                 recvRef = MSG_SYNC_POS_VEL | iter;
-                commNbrs = commDataSendPosVel.size();
+                commNbrs = commDataRecvPosVel.size();
                 CkPrintf("PosVel num nbrs = %d\n", commNbrs);
             }
 
@@ -184,7 +184,7 @@ mainmodule lulesh {
                          domain.sizeZ(), true, true, commDataSendMonoQ);
 
                 recvRef = MSG_MONOQ | iter;
-                commNbrs = commDataSendMonoQ.size();
+                commNbrs = commDataRecvMonoQ.size();
                 CkPrintf("Q num nbrs = %d\n", commNbrs);
             }
 
