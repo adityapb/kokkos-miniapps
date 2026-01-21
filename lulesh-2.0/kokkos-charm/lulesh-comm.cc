@@ -411,7 +411,7 @@ void DomainChare::CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index
       /* receive data from domains connected only by an edge */
       if (rowMin && colMin && doRecv) {
          commDataMap[{thisIndex.x-1, thisIndex.y-1, thisIndex.z}] = 
-            CommData(pmsg, emsg, cmsg, 0, 1, 0, 1, 0, dz, 1);
+            CommData(pmsg, emsg, cmsg, 0, 1, 0, dx*dy, 0, dz, 1);
          ++emsg ;
       }
 
@@ -423,7 +423,7 @@ void DomainChare::CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index
 
       if (colMin && planeMin && doRecv) {
          commDataMap[{thisIndex.x-1, thisIndex.y, thisIndex.z-1}] = 
-            CommData(pmsg, emsg, cmsg, 0, dy, 0, 1, 0, dy, 1);
+            CommData(pmsg, emsg, cmsg, 0, dx, 0, 1, 0, dy, 1);
          ++emsg ;
       }
 
@@ -515,19 +515,19 @@ void DomainChare::CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index
       if (rowMax && colMin && planeMax) {
          /* corner at domain logical coord (0, 1, 1) */
          commDataMap[{thisIndex.x-1, thisIndex.y+1, thisIndex.z+1}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1) + (dy - 1), 1, 0, 1, 0, 1, 1);
+            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1) + dx*(dy - 1), 1, 0, 1, 0, 1, 1);
          ++cmsg ;
       }
       if (rowMax && colMax && planeMin && doRecv) {
          /* corner at domain logical coord (1, 1, 0) */
          commDataMap[{thisIndex.x+1, thisIndex.y+1, thisIndex.z-1}] = 
-            CommData(pmsg, emsg, cmsg, dx*(dy - 1), 1, 0, 1, 0, 1, 1);
+            CommData(pmsg, emsg, cmsg, dx*dy - 1, 1, 0, 1, 0, 1, 1);
          ++cmsg ;
       }
       if (rowMax && colMax && planeMax) {
          /* corner at domain logical coord (1, 1, 1) */
          commDataMap[{thisIndex.x+1, thisIndex.y+1, thisIndex.z+1}] = 
-            CommData(pmsg, emsg, cmsg, dx*dy*(dz - 1) + (dy - 1), 1, 0, 1, 0, 1, 1);
+            CommData(pmsg, emsg, cmsg, dx*dy*dz - 1, 1, 0, 1, 0, 1, 1);
          ++cmsg ;
       }
    }
