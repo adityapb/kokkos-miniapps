@@ -720,7 +720,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
          Copy2D(domain.commDataRecvView, 
             offset + fi * cdata.size[0] * cdata.size[1],
             cdata.src_stride[0], cdata.src_stride[1],
-            dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
+            dest, fieldOffset[fi] + cdata.pmsg * maxPlaneComm, cdata.dst_stride[0], cdata.dst_stride[1],
             cdata.size[0], cdata.size[1], commSpace
             );
       }
@@ -732,7 +732,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
          Copy1D(domain.commDataRecvView, 
             offset + fi * cdata.size[0],
             cdata.src_stride[0],
-            dest, cdata.offset, cdata.dst_stride[0],
+            dest, fieldOffset[fi] + cdata.pmsg * maxPlaneComm, cdata.dst_stride[0],
             cdata.size[0], commSpace
             );
       }
