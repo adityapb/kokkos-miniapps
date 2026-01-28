@@ -353,6 +353,9 @@ static inline void IntegrateStressForElems(Domain &domain, Real_t *sigxx,
   int team_size = 1;
   if(Kokkos::DefaultExecutionSpace().concurrency()>1024) team_size = 128;
 
+  execSpace.fence();
+  CkPrintf("First fence in IntegrateStressForElems\n");
+
   Kokkos::parallel_for ("IntegrateStressForElems B",Kokkos::TeamPolicy<ExecSpace>(execSpace, (numNode+127)/128,team_size,2),
         KOKKOS_LAMBDA (const typename Kokkos::TeamPolicy<ExecSpace>::member_type& team)
      {
@@ -376,6 +379,9 @@ static inline void IntegrateStressForElems(Domain &domain, Real_t *sigxx,
          });
        });
      });
+
+  execSpace.fence();
+  CkPrintf("Second fence in IntegrateStressForElems\n");
 }
 
 KOKKOS_INLINE_FUNCTION void VoluDer(const Real_t x0, const Real_t x1, const Real_t x2,
