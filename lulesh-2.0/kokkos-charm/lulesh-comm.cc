@@ -709,7 +709,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
    fieldOffset[1] = domain.numElem() ;
    fieldOffset[2] = domain.numElem() ;
 
-   int offset = cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL;
+   int offset = cdata.pmsg * maxPlaneComm;
 
    if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
@@ -720,10 +720,10 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
          Copy1D(domain.commDataRecvView, 
             offset + fi * cdata.size[0] * cdata.size[1],
             1,
-            dest, fieldOffset[fi], 1,
+            dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0] * cdata.size[1], 1,
             cdata.size[0] * cdata.size[1], commSpace
             );
-         fieldOffset[fi] += cdata.size[0] * cdata.size[1];
+         //fieldOffset[fi] += cdata.size[0] * cdata.size[1];
       }
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
@@ -733,10 +733,10 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
          Copy1D(domain.commDataRecvView, 
             offset + fi * cdata.size[0],
             1,
-            dest, fieldOffset[fi], 1,
+            dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0], 1,
             cdata.size[0], commSpace
             );
-         fieldOffset[fi] += cdata.size[0];
+         //fieldOffset[fi] += cdata.size[0];
       }
    }
 }
