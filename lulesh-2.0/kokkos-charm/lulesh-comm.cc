@@ -391,7 +391,7 @@ void DomainChare::CommDataRecvInit(Domain& domain, Index_t dx, Index_t dy, Index
    if (rowMax) {
       /* semi-contiguous memory */
       commDataMap[{thisIndex.x, thisIndex.y+1, thisIndex.z}] = CommData(
-         pmsg, emsg, cmsg, dx*dy*(dy - 1), 1, dx, 1, dx*dy, dx, dy);
+         pmsg, emsg, cmsg, dx*(dy - 1), 1, dx, 1, dx*dy, dx, dz);
       ++pmsg ;
    }
    if (colMin && doRecv) {
