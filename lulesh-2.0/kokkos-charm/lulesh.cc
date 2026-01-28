@@ -326,9 +326,13 @@ static inline void IntegrateStressForElems(Domain &domain, Real_t *sigxx,
                                            Index_t numNode, ExecSpace execSpace) {
   Index_t numElem8 = numElem * 8;
   ResizeBuffer((numElem8*sizeof(Real_t)+4096)*3, execSpace);
-  Real_t *fx_elem = AllocateFromBuffer<Real_t>(numElem8);
-  Real_t *fy_elem = AllocateFromBuffer<Real_t>(numElem8);
-  Real_t *fz_elem = AllocateFromBuffer<Real_t>(numElem8);
+  Real_t *fx_elem_ptr = AllocateFromBuffer<Real_t>(numElem8);
+  Real_t *fy_elem_ptr = AllocateFromBuffer<Real_t>(numElem8);
+  Real_t *fz_elem_ptr = AllocateFromBuffer<Real_t>(numElem8);
+  
+  Kokkos::View<Real_t*, Kokkos::MemoryTraits<Kokkos::Unmanaged>> fx_elem(fx_elem_ptr, numElem8);
+  Kokkos::View<Real_t*, Kokkos::MemoryTraits<Kokkos::Unmanaged>> fy_elem(fy_elem_ptr, numElem8);
+  Kokkos::View<Real_t*, Kokkos::MemoryTraits<Kokkos::Unmanaged>> fz_elem(fz_elem_ptr, numElem8);
 
   Kokkos::parallel_for("IntegrateStressForElems A", RangePolicy(execSpace, 0, numElem),
                        KOKKOS_LAMBDA(const int k) {
