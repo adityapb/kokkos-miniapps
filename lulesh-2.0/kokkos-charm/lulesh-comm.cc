@@ -764,9 +764,10 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
          Kokkos::View<Real_t*> dest = fieldData[fi] ;
-         CkPrintf("[DBG] processRemoteMass: 2D Add offset=%d size0=%d size1=%d, src_stride=%d %d, dst_stride=%d %d\n", 
+         CkPrintf("[DBG] processRemoteMass: 2D Add offset=%d size0=%d size1=%d, src_stride=%d %d, dst_stride=%d %d, dest_size=%d\n", 
             offset + fi * cdata.size[0] * cdata.size[1],
-            cdata.size[0], cdata.size[1], cdata.src_stride[0], cdata.src_stride[1], cdata.dst_stride[0], cdata.dst_stride[1]);
+            cdata.size[0], cdata.size[1], cdata.src_stride[0], cdata.src_stride[1], 
+            cdata.dst_stride[0], cdata.dst_stride[1], dest.size());
          Add2D(domain.commDataRecvView, 
                offset + fi * cdata.size[0] * cdata.size[1],
                cdata.src_stride[0], cdata.src_stride[1],
