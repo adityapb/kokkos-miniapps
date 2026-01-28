@@ -773,11 +773,11 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
          Kokkos::View<Real_t*> dest = fieldData[fi] ;
-         Add1D(domain.commDataRecvView, 
-               offset + fi * cdata.size[0],
-               cdata.src_stride[0],
-               dest, cdata.offset, cdata.dst_stride[0],
-               cdata.size[0], commSpace);
+         // Add1D(domain.commDataRecvView, 
+         //       offset + fi * cdata.size[0],
+         //       cdata.src_stride[0],
+         //       dest, cdata.offset, cdata.dst_stride[0],
+         //       cdata.size[0], commSpace);
       }
    }
 }
