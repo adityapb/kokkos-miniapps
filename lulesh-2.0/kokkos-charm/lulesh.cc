@@ -746,6 +746,7 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
     IntegrateStressForElems(domain, sigxx.data(), sigyy.data(), sigzz.data(), determ.data(), numElem,
                             domain.numNode(), execSpace);
 
+    execSpace.fence();
     // check for negative element volume
     int error = 0;
     Real_t* determ_ptr = determ.data();
