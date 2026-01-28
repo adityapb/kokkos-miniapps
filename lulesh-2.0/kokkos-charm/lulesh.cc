@@ -740,6 +740,7 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
     Kokkos::View<Real_t*> sigyy(Kokkos::view_alloc(execSpace, "sigyy"), numElem);
     Kokkos::View<Real_t*> sigzz(Kokkos::view_alloc(execSpace, "sigzz"), numElem);
     Kokkos::View<Real_t*> determ(Kokkos::view_alloc(execSpace, "determ"), numElem);
+    execSpace.fence();
 
     InitStressTermsForElems(domain, sigxx.data(), sigyy.data(), sigzz.data(), numElem, execSpace);
 
