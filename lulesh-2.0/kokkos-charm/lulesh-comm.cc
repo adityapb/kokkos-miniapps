@@ -59,9 +59,9 @@
 
 /******************************************/
 
-void Copy1D(Kokkos::View<Real_t*> src, int src_offset,
+void Copy1D(Kokkos::View<Real_t*> &src, int src_offset,
    int src_stride,
-    Kokkos::View<Real_t*> dest, int dst_offset, int dst_stride,
+    Kokkos::View<Real_t*> &dest, int dst_offset, int dst_stride,
    int size, ExecSpace execSpace)
 {
    Kokkos::parallel_for("Copy1D", RangePolicy(execSpace, 0, size),
@@ -71,8 +71,8 @@ void Copy1D(Kokkos::View<Real_t*> src, int src_offset,
    Kokkos::fence();
 }
 
-void Add1D(Kokkos::View<Real_t*> src, int src_offset, int src_stride,
-   Kokkos::View<Real_t*> dest, int dst_offset, int dst_stride,
+void Add1D(Kokkos::View<Real_t*> &src, int src_offset, int src_stride,
+   Kokkos::View<Real_t*> &dest, int dst_offset, int dst_stride,
    int size, ExecSpace execSpace)
 {
    Kokkos::parallel_for("Add1D", RangePolicy(execSpace, 0, size),
@@ -84,10 +84,10 @@ void Add1D(Kokkos::View<Real_t*> src, int src_offset, int src_stride,
 
 /******************************************/
 
-void Copy2D(Kokkos::View<Real_t*> src, 
+void Copy2D(Kokkos::View<Real_t*> &src, 
    int src_offset,
    int src_stride_x, int src_stride_y,
-   Kokkos::View<Real_t*> dest, 
+   Kokkos::View<Real_t*> &dest, 
    int dst_offset,
    int dst_stride_x, int dst_stride_y,
    int dim_x, int dim_y, ExecSpace execSpace)
@@ -101,10 +101,10 @@ void Copy2D(Kokkos::View<Real_t*> src,
    Kokkos::fence();
 }
 
-void Add2D(Kokkos::View<Real_t*> src, 
+void Add2D(Kokkos::View<Real_t*> &src, 
    int src_offset,
    int src_stride_x, int src_stride_y,
-   Kokkos::View<Real_t*> dest, 
+   Kokkos::View<Real_t*> &dest, 
    int dst_offset,
    int dst_stride_x, int dst_stride_y,
    int dim_x, int dim_y, ExecSpace execSpace)

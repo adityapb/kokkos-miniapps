@@ -736,10 +736,11 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
   Index_t numElem = domain.numElem();
   if (numElem != 0) {
     Real_t hgcoef = domain.hgcoef();
-    Kokkos::View<Real_t*> sigxx("sigxx", numElem);
-    Kokkos::View<Real_t*> sigyy("sigyy", numElem);
-    Kokkos::View<Real_t*> sigzz("sigzz", numElem);
-    Kokkos::View<Real_t*> determ("determ", numElem);
+    using ViewType = Kokkos::View<Real_t*, typename ExecSpace::memory_space>;
+    ViewType sigxx("sigxx", numElem);
+    ViewType sigyy("sigyy", numElem);
+    ViewType sigzz("sigzz", numElem);
+    ViewType determ("determ", numElem);
 
     InitStressTermsForElems(domain, sigxx.data(), sigyy.data(), sigzz.data(), numElem, execSpace);
 
