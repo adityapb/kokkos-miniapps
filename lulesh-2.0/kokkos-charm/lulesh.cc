@@ -22,11 +22,11 @@ static size_t buffer_size;
 static size_t buffer_offset;
 static int do_atomic;
 
-void ResizeBuffer(const size_t size) {
+void ResizeBuffer(const size_t size, ExecSpace execSpace) {
   buffer_offset = 0;
   if(size/sizeof(Real_t)+1 > buffer_size) {
     buffer_size = size/sizeof(Real_t)+1;
-    buffer = Kokkos::View<Real_t*>("Buffer",buffer_size);
+    buffer = Kokkos::View<Real_t*>(Kokkos::view_alloc(execSpace, "Buffer"),buffer_size);
   }
 }
 
@@ -324,7 +324,7 @@ static inline void IntegrateStressForElems(Domain &domain, Real_t *sigxx,
                                            Real_t *determ, Index_t numElem,
                                            Index_t numNode, ExecSpace execSpace) {
   Index_t numElem8 = numElem * 8;
-  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*3);
+  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*3, execSpace);
   Real_t *fx_elem = AllocateFromBuffer<Real_t>(numElem8);
   Real_t *fy_elem = AllocateFromBuffer<Real_t>(numElem8);
   Real_t *fz_elem = AllocateFromBuffer<Real_t>(numElem8);
@@ -683,7 +683,7 @@ static inline void CalcHourglassControlForElems(Domain &domain, Real_t determ[],
                                                 Real_t hgcoef, ExecSpace execSpace) {
   Index_t numElem = domain.numElem();
   Index_t numElem8 = numElem * 8;
-  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*(do_atomic?6:9));
+  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*(do_atomic?6:9), execSpace);
 
   Real_t *dvdx = AllocateFromBuffer<Real_t>(numElem8);
   Real_t *dvdy = AllocateFromBuffer<Real_t>(numElem8);
@@ -749,8 +749,9 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
 
     // check for negative element volume
     int error = 0;
+    Real_t* determ_ptr = determ.data();
     Kokkos::parallel_reduce(RangePolicy(execSpace, 0, numElem), KOKKOS_LAMBDA(const int k, int &err) {
-      if (determ[k] <= Real_t(0.0)) {
+      if (determ_ptr[k] <= Real_t(0.0)) {
         err++;
       }
     },error);
@@ -1664,7 +1665,7 @@ static inline void EvalEOSForElems(Domain &domain, Real_t *vnewc,
   Real_t emin = domain.emin();
   Real_t rho0 = domain.refdens();
 
-  ResizeBuffer((numElemReg*sizeof(Real_t)+4096)*16);
+  ResizeBuffer((numElemReg*sizeof(Real_t)+4096)*16, execSpace);
 
   Real_t *e_old = AllocateFromBuffer<Real_t>(numElemReg);
   Real_t *delvc = AllocateFromBuffer<Real_t>(numElemReg);
