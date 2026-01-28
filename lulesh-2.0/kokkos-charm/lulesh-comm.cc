@@ -757,26 +757,29 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
 
    int offset = cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL;
 
-   // if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
-   //       offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
-   //    for (Index_t fi=0 ; fi<xferFields; ++fi) {
-   //       Kokkos::View<Real_t*> &dest = fieldData[fi] ;
-   //       Add2D(domain.commDataRecvView, 
-   //             offset + fi * cdata.size[0] * cdata.size[1],
-   //             cdata.src_stride[0], cdata.src_stride[1],
-   //             dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-   //             cdata.size[0], cdata.size[1], commSpace);
-   //    }
-   // } else {
-   //    for (Index_t fi=0 ; fi<xferFields; ++fi) {
-   //       Kokkos::View<Real_t*> &dest = fieldData[fi] ;
-   //       Add1D(domain.commDataRecvView, 
-   //             offset + fi * cdata.size[0],
-   //             cdata.src_stride[0],
-   //             dest, cdata.offset, cdata.dst_stride[0],
-   //             cdata.size[0], commSpace);
-   //    }
-   // }
+   CkPrintf("processRemoteMass: ref=%d from (%d,%d,%d) to (%d,%d,%d) xferFields=%d size=%d\n", 
+      ref, x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields, size);
+
+   if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
+         offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
+      for (Index_t fi=0 ; fi<xferFields; ++fi) {
+         Kokkos::View<Real_t*> &dest = fieldData[fi] ;
+         Add2D(domain.commDataRecvView, 
+               offset + fi * cdata.size[0] * cdata.size[1],
+               cdata.src_stride[0], cdata.src_stride[1],
+               dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
+               cdata.size[0], cdata.size[1], commSpace);
+      }
+   } else {
+      for (Index_t fi=0 ; fi<xferFields; ++fi) {
+         Kokkos::View<Real_t*> &dest = fieldData[fi] ;
+         Add1D(domain.commDataRecvView, 
+               offset + fi * cdata.size[0],
+               cdata.src_stride[0],
+               dest, cdata.offset, cdata.dst_stride[0],
+               cdata.size[0], commSpace);
+      }
+   }
 }
 
 /******************************************/
