@@ -55,23 +55,23 @@ mainmodule lulesh {
                 CommDataRecvInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
                              locDom->sizeZ(), true, true, commDataRecvMonoQ);
 
-                Kokkos::View<Real_t*> fieldData;
-                fieldData = locDom->m_nodalMass;
-            //    CommSend(*locDom, MSG_COMM_SBN, 1, &fieldData, locDom->sizeX() + 1,
-            //             locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSendSBN);
+                Kokkos::View<Real_t*> fieldData[1];
+                fieldData[0] = locDom->m_nodalMass;
+                CommSend(*locDom, MSG_COMM_SBN, 1, fieldData, locDom->sizeX() + 1,
+                         locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSendSBN);
 
-            //    recvRef = MSG_COMM_SBN | iter;
-            //    commNbrs = commDataRecvSBN.size();
+                recvRef = MSG_COMM_SBN | iter;
+                commNbrs = commDataRecvSBN.size();
             }
 
-            //for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
-            //    when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
-            //            int size, nocopydevice Real_t buf[size]) {
-            //        serial "processRemoteMass" {
-            //            processRemoteMass(ref, x, y, z, xferFields, size, buf);
-            //        }
-            //    }
-            //}
+            for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
+                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                        int size, nocopydevice Real_t buf[size]) {
+                    serial "processRemoteMass" {
+                        processRemoteMass(ref, x, y, z, xferFields, size, buf);
+                    }
+                }
+            }
             
             serial {
                 CkCallback cb(CkIndex_Main::initDone(), mainProxy);
