@@ -25,6 +25,7 @@ static int do_atomic;
 void ResizeBuffer(const size_t size, ExecSpace execSpace) {
   buffer_offset = 0;
   if(size/sizeof(Real_t)+1 > buffer_size) {
+    Kokkos::fence();  // Ensure all previous buffer uses complete before reallocation
     buffer_size = size/sizeof(Real_t)+1;
     buffer = Kokkos::View<Real_t*>(Kokkos::view_alloc(execSpace, "Buffer"),buffer_size);
   }
@@ -748,7 +749,6 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
     IntegrateStressForElems(domain, sigxx.data(), sigyy.data(), sigzz.data(), determ.data(), numElem,
                             domain.numNode(), execSpace);
 
-    execSpace.fence();
     // check for negative element volume
     int error = 0;
     Real_t* determ_ptr = determ.data();
