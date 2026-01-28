@@ -763,7 +763,7 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
    if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
-         Kokkos::View<Real_t*> &dest = fieldData[fi] ;
+         Kokkos::View<Real_t*> dest = fieldData[fi] ;
          Add2D(domain.commDataRecvView, 
                offset + fi * cdata.size[0] * cdata.size[1],
                cdata.src_stride[0], cdata.src_stride[1],
@@ -772,7 +772,7 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
       }
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
-         Kokkos::View<Real_t*> &dest = fieldData[fi] ;
+         Kokkos::View<Real_t*> dest = fieldData[fi] ;
          Add1D(domain.commDataRecvView, 
                offset + fi * cdata.size[0],
                cdata.src_stride[0],
