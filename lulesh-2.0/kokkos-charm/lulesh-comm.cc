@@ -182,7 +182,7 @@ void DomainChare::CommDataSendInit(Domain& domain, Index_t dx, Index_t dy, Index
       }
       if (rowMax && doSend) {
          commDataMap[{thisIndex.x, thisIndex.y+1, thisIndex.z}] = CommData(
-            pmsg, emsg, cmsg, dx*(dy - 1), 1, dx*dy, 1, dx, dx, dy);
+            pmsg, emsg, cmsg, dx*(dy - 1), 1, dx*dy, 1, dx, dx, dz);
          ++pmsg ;
       }
    }
