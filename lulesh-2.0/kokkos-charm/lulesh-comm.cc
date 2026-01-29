@@ -68,7 +68,7 @@ void Copy1D(Kokkos::View<Real_t*> &src, int src_offset,
                        KOKKOS_LAMBDA(const int i) {
       dest[dst_offset + i * dst_stride] = src[src_offset + i * src_stride];
    });
-   Kokkos::fence();
+   execSpace.fence();
 }
 
 void Add1D(Kokkos::View<Real_t*> &src, int src_offset, int src_stride,
@@ -79,7 +79,7 @@ void Add1D(Kokkos::View<Real_t*> &src, int src_offset, int src_stride,
                        KOKKOS_LAMBDA(const int i) {
       dest[dst_offset + i * dst_stride] += src[src_offset + i * src_stride];
    });
-   Kokkos::fence();
+   execSpace.fence();
 }
 
 /******************************************/
@@ -98,7 +98,7 @@ void Copy2D(Kokkos::View<Real_t*> &src,
       dest[dst_offset + j * dst_stride_y + i * dst_stride_x] = 
          src[src_offset + j * src_stride_y + i * src_stride_x];
    });
-   Kokkos::fence();
+   execSpace.fence();
 }
 
 void Add2D(Kokkos::View<Real_t*> &src, 
@@ -115,7 +115,7 @@ void Add2D(Kokkos::View<Real_t*> &src,
       dest[dst_offset + j * dst_stride_y + i * dst_stride_x] += 
          src[src_offset + j * src_stride_y + i * src_stride_x];
    });
-   Kokkos::fence();
+   execSpace.fence();
 }
 
 /******************************************/

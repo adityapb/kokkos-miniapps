@@ -55,6 +55,7 @@ mainmodule lulesh {
                 CommDataRecvInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
                              locDom->sizeZ(), true, true, commDataRecvMonoQ);
 
+                computeSpace.fence();
                 Kokkos::View<Real_t*> fieldData[1];
                 fieldData[0] = locDom->m_nodalMass;
                 CommSend(*locDom, MSG_COMM_SBN, 1, fieldData, locDom->sizeX() + 1,
