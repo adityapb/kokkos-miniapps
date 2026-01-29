@@ -682,6 +682,7 @@ void DomainChare::processRemotePosVel(int ref, int x, int y, int z, int xferFiel
             );
       }
    }
+   commSpace.fence();
 }
 
 /******************************************/
@@ -739,6 +740,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
          //fieldOffset[fi] += cdata.size[0];
       }
    }
+   commSpace.fence();
 }
 
 /******************************************/
@@ -786,6 +788,7 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
                cdata.size[0], commSpace);
       }
    }
+   commSpace.fence();
 }
 
 /******************************************/
@@ -826,4 +829,5 @@ void DomainChare::processRemoteForce(int ref, int x, int y, int z, int xferField
                cdata.size[0], commSpace);
       }
    }
+   commSpace.fence();
 }
