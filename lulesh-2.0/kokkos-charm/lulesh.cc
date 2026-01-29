@@ -2013,8 +2013,9 @@ DomainChare::DomainChare(int numRanks, Index_t nx_, int nr_,
   hapiCheck(cudaStreamCreateWithPriority(&commStream, cudaStreamNonBlocking, -1));
   hapiCheck(cudaStreamCreateWithPriority(&computeStream, cudaStreamNonBlocking, 0));
 
-  commSpace = ExecSpace(commStream);
-  computeSpace = ExecSpace(computeStream);
+  // Use default execution space for both to simplify
+  commSpace = ExecSpace();
+  computeSpace = ExecSpace();
 
   Int_t col, row, plane, side;
   flatIndex = thisIndex.x + thisIndex.y * numChares_ + thisIndex.z * numChares_ * numChares_;
