@@ -55,7 +55,6 @@ mainmodule lulesh {
                 CommDataRecvInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
                              locDom->sizeZ(), true, true, commDataRecvMonoQ);
 
-                computeSpace.fence();
                 Kokkos::View<Real_t*> fieldData[1];
                 fieldData[0] = locDom->m_nodalMass;
                 CommSend(*locDom, MSG_COMM_SBN, 1, fieldData, locDom->sizeX() + 1,
@@ -112,7 +111,6 @@ mainmodule lulesh {
             serial "CalcForceForNodes" {
                 Domain& domain = *locDom;
                 CalcForceForNodes(domain, computeSpace);
-                computeSpace.fence();
 
                 Kokkos::View<Real_t*> fieldData[3];
                 fieldData[0] = domain.m_fx;
@@ -135,6 +133,10 @@ mainmodule lulesh {
                 }
             }
 
+            serial "AfterForceRecv" {
+                Kokkos::fence();
+            }
+
             serial "LagrangeNodal" {
                 Domain& domain = *locDom;
                 const Real_t delt = domain.deltatime();
@@ -147,7 +149,6 @@ mainmodule lulesh {
                 CalcVelocityForNodes(domain, delt, u_cut, domain.numNode(), computeSpace);
 
                 CalcPositionForNodes(domain, delt, domain.numNode(), computeSpace);
-                computeSpace.fence();
 
                 Kokkos::View<Real_t*> fieldData[6];
                 fieldData[0] = domain.m_x;
@@ -173,11 +174,14 @@ mainmodule lulesh {
                 }
             }
 
+            serial "AfterPosVelRecv" {
+                Kokkos::fence();
+            }
+
             serial "LagrangeElements" {
                 Domain& domain = *locDom;
                 CalcLagrangeElements(domain, computeSpace);
                 CalcQForElems(domain, computeSpace);
-                computeSpace.fence();
 
                 Kokkos::View<Real_t*> fieldData[3];
                 fieldData[0] = domain.m_delv_xi;
@@ -201,6 +205,10 @@ mainmodule lulesh {
                         processRemoteQ(ref, x, y, z, xferFields, size, buf);
                     }
                 }
+            }
+
+            serial "AfterQRecv" {
+                Kokkos::fence();
             }
 
             serial "LagrangeElementsPost" {
