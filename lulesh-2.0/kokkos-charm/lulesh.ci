@@ -111,6 +111,7 @@ mainmodule lulesh {
             serial "CalcForceForNodes" {
                 Domain& domain = *locDom;
                 CalcForceForNodes(domain, computeSpace);
+                computeSpace.fence();
 
                 Kokkos::View<Real_t*> fieldData[3];
                 fieldData[0] = domain.m_fx;
@@ -145,6 +146,7 @@ mainmodule lulesh {
                 CalcVelocityForNodes(domain, delt, u_cut, domain.numNode(), computeSpace);
 
                 CalcPositionForNodes(domain, delt, domain.numNode(), computeSpace);
+                computeSpace.fence();
 
                 Kokkos::View<Real_t*> fieldData[6];
                 fieldData[0] = domain.m_x;
@@ -174,6 +176,7 @@ mainmodule lulesh {
                 Domain& domain = *locDom;
                 CalcLagrangeElements(domain, computeSpace);
                 CalcQForElems(domain, computeSpace);
+                computeSpace.fence();
 
                 Kokkos::View<Real_t*> fieldData[3];
                 fieldData[0] = domain.m_delv_xi;
