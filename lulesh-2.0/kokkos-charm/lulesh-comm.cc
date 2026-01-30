@@ -599,18 +599,18 @@ void DomainChare::CommRecv(int ref, int x, int y, int z, int xferFields, int& si
    CommDataMap_t* commDataMap;
    if (msgType == MSG_SYNC_POS_VEL) {
       commDataMap = &commDataRecvPosVel;
-      CkPrintf("DomainChare::CommRecv: MSG_SYNC_POS_VEL from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 
-         x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields);
+      CkPrintf("DomainChare::CommRecv: ref=%d MSG_SYNC_POS_VEL from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 
+         ref, x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields);
    }
    else if (msgType == MSG_MONOQ) {
       commDataMap = &commDataRecvMonoQ;
-      CkPrintf("DomainChare::CommRecv: MSG_MONOQ from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 
-         x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields);
+      CkPrintf("DomainChare::CommRecv: ref=%d MSG_MONOQ from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 
+         ref, x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields);
    }
    else if (msgType == MSG_COMM_SBN) {
       commDataMap = &commDataRecvSBN;
-      CkPrintf("DomainChare::CommRecv: MSG_COMM_SBN from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 
-         x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields);
+      CkPrintf("DomainChare::CommRecv: ref=%d MSG_COMM_SBN from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 
+         ref, x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields);
    }
    else
       CkAbort("DomainChare::CommRecv: Unknown msgType") ;
