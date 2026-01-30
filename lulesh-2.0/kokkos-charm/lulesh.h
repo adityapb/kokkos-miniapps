@@ -73,18 +73,18 @@ public:
 
   void TimeIncrement(Real_t newdt);
 
-  void CommRecv(int ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post);
+  void CommRecv(uint32_t ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post);
 
   void packingDone(PackingDoneMsg* msg);
 
-  void processRemotePosVel(int ref, int x, int y, int z, int xferFields, 
+  void processRemotePosVel(uint32_t ref, int x, int y, int z, int xferFields, 
     int size, Real_t* buf);
 
-  void processRemoteQ(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
+  void processRemoteQ(uint32_t ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
 
-  void processRemoteMass(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
+  void processRemoteMass(uint32_t ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
 
-  void processRemoteForce(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
+  void processRemoteForce(uint32_t ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
 
   Domain *locDom;
   uint32_t iter;
