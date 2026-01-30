@@ -549,12 +549,17 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       int offsetY = std::get<1>(idx) - thisIndex.y ;
       int offsetZ = std::get<2>(idx) - thisIndex.z ;
 
+      CkPrintf("DomainChare::CommSend: ref=%d msgType=%d to (%d,%d,%d) from (%d,%d,%d) offsetX=%d offsetY=%d offsetZ=%d\n", 
+         (msgType | iter), msgType, std::get<0>(idx), std::get<1>(idx), std::get<2>(idx),
+         thisIndex.x, thisIndex.y, thisIndex.z,
+         offsetX, offsetY,  offsetZ);
+
       int offset = cdata.pmsg * maxPlaneComm + cdata.emsg * maxEdgeComm + cdata.cmsg * CACHE_COHERENCE_PAD_REAL; 
 
       if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
-            CkPrintf("2D copy offsetX=%d offsetY=%d offsetZ=%d\n", offsetX, offsetY, offsetZ);
+            //CkPrintf("2D copy offsetX=%d offsetY=%d offsetZ=%d\n", offsetX, offsetY, offsetZ);
             Kokkos::View<Real_t*> src = fieldData[fi] ;
             Copy2D(src, cdata.offset, cdata.src_stride[0], cdata.src_stride[1],
                    domain.commDataSendView, 
@@ -563,10 +568,10 @@ void DomainChare::CommSend(Domain& domain, int msgType,
                    cdata.size[0], cdata.size[1], commSpace);
          }
       } else {
-         CkPrintf("1D copy offsetX=%d offsetY=%d offsetZ=%d, offset=%d, dx=%d, dy=%d, dz=%d, \
-             commDataSendView size=%lu, send offset=%d\n", 
-             offsetX, offsetY, offsetZ, cdata.offset, dx, dy, dz, domain.commDataSendView.size(), 
-             offset);
+         // CkPrintf("1D copy offsetX=%d offsetY=%d offsetZ=%d, offset=%d, dx=%d, dy=%d, dz=%d, \
+         //     commDataSendView size=%lu, send offset=%d\n", 
+         //     offsetX, offsetY, offsetZ, cdata.offset, dx, dy, dz, domain.commDataSendView.size(), 
+         //     offset);
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             Kokkos::View<Real_t*> src = fieldData[fi] ;
             Copy1D(src, cdata.offset, cdata.src_stride[0],
