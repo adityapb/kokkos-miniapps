@@ -83,7 +83,7 @@ mainmodule lulesh {
         
         entry [reductiontarget] void TimeStepUpdate(Real_t newdt);
 
-        entry void CommRecv(int ref, int x, int y, int z, int xferFields, 
+        entry void CommRecv(unit32_t ref, int x, int y, int z, int xferFields, 
             int size, nocopydevice Real_t buf[size]);
 
         entry void run() {
