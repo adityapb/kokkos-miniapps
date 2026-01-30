@@ -87,11 +87,11 @@ public:
   void processRemoteForce(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf);
 
   Domain *locDom;
-  int iter;
+  uint32_t iter;
   int flatIndex;
   int commNbrs, remoteCount;
   int numChares;
-  int recvRef;
+  uint32_t recvRef;
   struct cmdLineOpts opts;
 
   CommDataMap_t commDataSendPosVel;
@@ -108,11 +108,11 @@ public:
 
 class PackingDoneMsg : public CMessage_PackingDoneMsg {
 public:
-  int msgType;
+  uint32_t msgType;
   int x, y, z;
   int xferFields, sendCount, offset;
 
-  PackingDoneMsg(int msgType_, int x_, int y_, int z_,
+  PackingDoneMsg(uint32_t msgType_, int x_, int y_, int z_,
                  int xferFields_, int sendCount_, int offset_)
       : msgType(msgType_), x(x_), y(y_), z(z_),
         xferFields(xferFields_), sendCount(sendCount_), offset(offset_) {}

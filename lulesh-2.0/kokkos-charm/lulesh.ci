@@ -125,7 +125,7 @@ mainmodule lulesh {
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
-                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                when CommRecv[recvRef](uint32_t ref, int x, int y, int z, int xferFields, 
                         int size, nocopydevice Real_t buf[size]) {
                     serial "processRemoteForce" {
                         processRemoteForce(ref, x, y, z, xferFields, size, buf);
@@ -166,7 +166,7 @@ mainmodule lulesh {
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
-                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                when CommRecv[recvRef](uint32_t ref, int x, int y, int z, int xferFields, 
                         int size, nocopydevice Real_t buf[size]) {
                     serial "processRemotePosVel" {
                         processRemotePosVel(ref, x, y, z, xferFields, size, buf);
@@ -197,7 +197,7 @@ mainmodule lulesh {
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
-                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                when CommRecv[recvRef](uint32_t ref, int x, int y, int z, int xferFields, 
                         int size, nocopydevice Real_t buf[size]) {
                     serial "processRemoteQ" {
                         CkPrintf("DomainChare::CommRecv: ref=%d from (%d,%d,%d) to (%d,%d,%d) xferFields=%d\n", 

@@ -584,18 +584,18 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       hapiAddCallback(commStream, cb, msg);
    }
 }
-
+   
 void DomainChare::packingDone(PackingDoneMsg* msg) {
-   int ref = msg->msgType | iter;
+   uint32_t ref = msg->msgType | iter;
    thisProxy(msg->x, msg->y, msg->z).CommRecv(ref, thisIndex.x, thisIndex.y, thisIndex.z, 
       msg->xferFields, msg->sendCount, CkDeviceBuffer(locDom->commDataSendView.data() + msg->offset, commStream));
 }
 
 /******************************************/
 
-void DomainChare::CommRecv(int ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post) {
+void DomainChare::CommRecv(uint32_t ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post) {
    
-   int msgType = (ref >> 29) << 29;
+   uint32_t msgType = (ref >> 29) << 29;
    CommDataMap_t* commDataMap;
    if (msgType == MSG_SYNC_POS_VEL) {
       commDataMap = &commDataRecvPosVel;
@@ -634,7 +634,7 @@ void DomainChare::CommRecv(int ref, int x, int y, int z, int xferFields, int& si
 
 /******************************************/
 
-void DomainChare::processRemotePosVel(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
+void DomainChare::processRemotePosVel(uint32_t ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
    Domain& domain = *locDom;
 
    Index_t maxPlaneComm = xferFields * domain.maxPlaneSize() ;
@@ -682,7 +682,7 @@ void DomainChare::processRemotePosVel(int ref, int x, int y, int z, int xferFiel
 
 /******************************************/
 
-void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
+void DomainChare::processRemoteQ(uint32_t ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
    Domain& domain = *locDom;
 
    CkPrintf("processRemoteQ: ref=%d from (%d,%d,%d) to (%d,%d,%d) xferFields=%d size=%d\n", 
@@ -739,7 +739,7 @@ void DomainChare::processRemoteQ(int ref, int x, int y, int z, int xferFields, i
 
 /******************************************/
 
-void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
+void DomainChare::processRemoteMass(uint32_t ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
    Domain& domain = *locDom;
 
    Index_t maxPlaneComm = xferFields * domain.maxPlaneSize() ;
@@ -786,7 +786,7 @@ void DomainChare::processRemoteMass(int ref, int x, int y, int z, int xferFields
 
 /******************************************/
 
-void DomainChare::processRemoteForce(int ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
+void DomainChare::processRemoteForce(uint32_t ref, int x, int y, int z, int xferFields, int size, Real_t* buf) {
    Domain& domain = *locDom;
 
    Index_t maxPlaneComm = xferFields * domain.maxPlaneSize() ;
