@@ -65,7 +65,7 @@ mainmodule lulesh {
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
-                when CommRecv[recvRef](int ref, int x, int y, int z, int xferFields, 
+                when CommRecv[recvRef](unit32_t ref, int x, int y, int z, int xferFields, 
                         int size, nocopydevice Real_t buf[size]) {
                     serial "processRemoteMass" {
                         processRemoteMass(ref, x, y, z, xferFields, size, buf);
