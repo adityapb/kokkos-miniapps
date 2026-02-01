@@ -12,9 +12,9 @@
 #include "lulesh.decl.h"
 #include "hapi.h"
 
-/* readonly */ CProxy_Main mainProxy;
-/* readonly */ CProxy_KokkosManager kokkosProxy;
-/* readonly */ CProxy_DomainChare domainProxy;
+extern CProxy_Main mainProxy;
+extern CProxy_KokkosManager kokkosProxy;
+extern CProxy_DomainChare domainProxy;
 
 struct TupleHash {
     template <class T1, class T2, class T3>
