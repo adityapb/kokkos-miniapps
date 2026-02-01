@@ -41,6 +41,12 @@ public:
   ~KokkosManager() {
     Kokkos::finalize();
   }
+
+  void finalize() {
+    Kokkos::finalize();
+    CkCallback cb(CkReductionTarget(Main, finalizeDone), mainProxy);
+    contribute(cb);
+  }
 };
 
 class DomainChare : public CBase_DomainChare {

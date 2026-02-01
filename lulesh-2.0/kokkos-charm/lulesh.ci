@@ -12,6 +12,8 @@ mainmodule lulesh {
 
         entry [reductiontarget] void done();
 
+        entry [reductiontarget] void finalizeDone();
+
         entry [reductiontarget] void initDone() {
             serial {    
                 start = CkWallTimer();
@@ -21,6 +23,13 @@ mainmodule lulesh {
             when done() {
                 serial {
                     CkPrintf("Total runtime = %f\n", CkWallTimer() - start);
+                    kokkosProxy.finalize();
+                    // CkExit();
+                }
+            }
+
+            while finalizeDone() {
+                serial {
                     CkExit();
                 }
             }
@@ -29,6 +38,7 @@ mainmodule lulesh {
 
     group KokkosManager {
         entry KokkosManager();
+        entry void finalize();
     };
 
     array [3D] DomainChare {
