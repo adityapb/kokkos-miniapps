@@ -542,6 +542,18 @@ void DomainChare::CommSend(Domain& domain, int msgType,
 
    CommDataMapIter_t it;
 
+   if (commDataMap.size() == 0) {
+      if (msgType == MSG_SYNC_POS_VEL) {
+         thisProxy[thisIndex].PosVelSendDone();
+      }
+      else if (msgType == MSG_MONOQ) {
+         thisProxy[thisIndex].MonoQSendDone();
+      }
+      else if (msgType == MSG_SBN) {
+         thisProxy[thisIndex].SBNSendDone();
+      }
+   }
+
    for (it = commDataMap.begin(); it != commDataMap.end(); ++it) {
       std::tuple<int, int, int> idx = it->first ;
       CommData cdata = it->second ;
