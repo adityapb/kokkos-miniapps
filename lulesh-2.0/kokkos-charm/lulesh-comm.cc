@@ -598,7 +598,7 @@ void DomainChare::packingDone(PackingDoneMsg* msg) {
       cb = new CkCallback(CkIndex_DomainChare::PosVelSendDone(), thisProxy[thisIndex]);
    }
    else if (msg->msgType == MSG_MONOQ) {
-      //cb = new CkCallback(CkIndex_DomainChare::MonoQSendDone(), thisProxy[thisIndex]);
+      cb = new CkCallback(CkIndex_DomainChare::MonoQSendDone(), thisProxy[thisIndex]);
    }
    else if (msg->msgType == MSG_COMM_SBN) {
       cb = new CkCallback(CkIndex_DomainChare::SBNSendDone(), thisProxy[thisIndex]);

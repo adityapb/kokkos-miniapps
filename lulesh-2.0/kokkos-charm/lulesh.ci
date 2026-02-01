@@ -89,7 +89,7 @@ mainmodule lulesh {
             int size, nocopydevice Real_t buf[size]);
 
         entry void PosVelSendDone();
-        //entry void MonoQSendDone();
+        entry void MonoQSendDone();
         entry void SBNSendDone();
 
         entry void run() {
@@ -226,7 +226,7 @@ mainmodule lulesh {
                 }
             }
 
-            /*serial "AfterQRecv" {
+            serial "AfterQRecv" {
                 Kokkos::fence();
             }
 
@@ -245,15 +245,19 @@ mainmodule lulesh {
                 CalcTimeConstraintsForElems(domain, computeSpace);
 
                 iter++;
+            }
 
-                // run next iteration
-                if ((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its)) {
-                    thisProxy[thisIndex].run();
-                } else {
-                    CkCallback cb(CkReductionTarget(Main, done), mainProxy);
-                    contribute(cb);
+            when MonoQSendDone() {
+                serial {
+                    // run next iteration
+                    if ((locDom->time() < locDom->stoptime()) && (locDom->cycle() < opts.its)) {
+                        thisProxy[thisIndex].run();
+                    } else {
+                        CkCallback cb(CkReductionTarget(Main, done), mainProxy);
+                        contribute(cb);
+                    }
                 }
-            }*/
+            }
         };
     };
 };
