@@ -12,10 +12,6 @@
 #include "lulesh.decl.h"
 #include "hapi.h"
 
-extern CProxy_Main mainProxy;
-extern CProxy_KokkosManager kokkosProxy;
-extern CProxy_DomainChare domainProxy;
-
 struct TupleHash {
     template <class T1, class T2, class T3>
     std::size_t operator()(const std::tuple<T1, T2, T3>& v) const {
@@ -46,11 +42,7 @@ public:
     Kokkos::finalize();
   }
 
-  void finalize() {
-    Kokkos::finalize();
-    CkCallback cb(CkReductionTarget(Main, finalizeDone), mainProxy);
-    contribute(cb);
-  }
+  void finalize();
 };
 
 class DomainChare : public CBase_DomainChare {

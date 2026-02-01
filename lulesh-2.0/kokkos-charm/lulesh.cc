@@ -2028,4 +2028,10 @@ DomainChare::DomainChare(int numRanks, Index_t nx_, int nr_,
   thisProxy[thisIndex].init(numRanks, nx_, nr_, balance_, cost_, numChares_);
 }
 
+void KokkosManager::finalize() {
+  Kokkos::finalize();
+  CkCallback cb(CkReductionTarget(Main, finalizeDone), mainProxy);
+  contribute(cb);
+}
+
 #include "lulesh.def.h"
