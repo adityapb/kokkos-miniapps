@@ -73,9 +73,11 @@ mainmodule lulesh {
                 }
             }
             
-            serial {
-                CkCallback cb(CkIndex_Main::initDone(), mainProxy);
-                contribute(cb);
+            when SBNSendDone() {
+                serial {
+                    CkCallback cb(CkIndex_Main::initDone(), mainProxy);
+                    contribute(cb);
+                }
             }
         };
 
@@ -85,6 +87,10 @@ mainmodule lulesh {
 
         entry void CommRecv(uint32_t ref, int x, int y, int z, int xferFields, 
             int size, nocopydevice Real_t buf[size]);
+
+        entry void PosVelSendDone();
+        entry void MonoQSendDone();
+        entry void SBNSendDone();
 
         entry void run() {
             serial "TimeStepCalculation" {
@@ -149,20 +155,24 @@ mainmodule lulesh {
                 CalcVelocityForNodes(domain, delt, u_cut, domain.numNode(), computeSpace);
 
                 CalcPositionForNodes(domain, delt, domain.numNode(), computeSpace);
+            }
 
-                Kokkos::View<Real_t*> fieldData[6];
-                fieldData[0] = domain.m_x;
-                fieldData[1] = domain.m_y;
-                fieldData[2] = domain.m_z;
-                fieldData[3] = domain.m_xd;
-                fieldData[4] = domain.m_yd;
-                fieldData[5] = domain.m_zd;
-                CommSend(domain, MSG_SYNC_POS_VEL, 6, fieldData, domain.sizeX() + 1,
-                         domain.sizeY() + 1, domain.sizeZ() + 1, false, false, commDataSendPosVel);
+            when SBNSendDone() {
+                serial {
+                    Kokkos::View<Real_t*> fieldData[6];
+                    fieldData[0] = domain.m_x;
+                    fieldData[1] = domain.m_y;
+                    fieldData[2] = domain.m_z;
+                    fieldData[3] = domain.m_xd;
+                    fieldData[4] = domain.m_yd;
+                    fieldData[5] = domain.m_zd;
+                    CommSend(domain, MSG_SYNC_POS_VEL, 6, fieldData, domain.sizeX() + 1,
+                            domain.sizeY() + 1, domain.sizeZ() + 1, false, false, commDataSendPosVel);
 
-                recvRef = MSG_SYNC_POS_VEL | iter;
-                commNbrs = commDataRecvPosVel.size();
-                CkPrintf("PosVel num nbrs = %d\n", commNbrs);
+                    recvRef = MSG_SYNC_POS_VEL | iter;
+                    commNbrs = commDataRecvPosVel.size();
+                    CkPrintf("PosVel num nbrs = %d\n", commNbrs);
+                }
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
@@ -182,18 +192,23 @@ mainmodule lulesh {
                 Domain& domain = *locDom;
                 CalcLagrangeElements(domain, computeSpace);
                 CalcQForElems(domain, computeSpace);
+            }
 
-                Kokkos::View<Real_t*> fieldData[3];
-                fieldData[0] = domain.m_delv_xi;
-                fieldData[1] = domain.m_delv_eta;
-                fieldData[2] = domain.m_delv_zeta;
-                CkPrintf("SENDING Q\n");
-                CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
-                         domain.sizeZ(), true, true, commDataSendMonoQ);
+            when PosVelSendDone() {
+                serial {
+                    Kokkos::View<Real_t*> fieldData[3];
+                    fieldData[0] = domain.m_delv_xi;
+                    fieldData[1] = domain.m_delv_eta;
+                    fieldData[2] = domain.m_delv_zeta;
+                    
+                    CkPrintf("SENDING Q\n");
+                    CommSend(domain, MSG_MONOQ, 3, fieldData, domain.sizeX(), domain.sizeY(),
+                            domain.sizeZ(), true, true, commDataSendMonoQ);
 
-                recvRef = MSG_MONOQ | iter;
-                commNbrs = commDataRecvMonoQ.size();
-                CkPrintf("Q num nbrs = %d\n", commNbrs);
+                    recvRef = MSG_MONOQ | iter;
+                    commNbrs = commDataRecvMonoQ.size();
+                    CkPrintf("Q num nbrs = %d\n", commNbrs);
+                }
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {

@@ -592,8 +592,22 @@ void DomainChare::CommSend(Domain& domain, int msgType,
    
 void DomainChare::packingDone(PackingDoneMsg* msg) {
    uint32_t ref = msg->msgType | iter;
+   CkCallback* cb;
+
+   if (msg->msgType == MSG_SYNC_POS_VEL) {
+      cb = new CkCallback(CkIndex_DomainChare::PosVelSendDone(), thisProxy[thisIndex]);
+   }
+   else if (msg->msgType == MSG_MONOQ) {
+      cb = new CkCallback(CkIndex_DomainChare::MonoQSendDone(), thisProxy[thisIndex]);
+   }
+   else if (msg->msgType == MSG_COMM_SBN) {
+      cb = new CkCallback(CkIndex_DomainChare::SBNSendDone(), thisProxy[thisIndex]);
+   }
+   else
+      CkAbort("DomainChare::packingDone: Unknown msgType") ;
+
    thisProxy(msg->x, msg->y, msg->z).CommRecv(ref, thisIndex.x, thisIndex.y, thisIndex.z, 
-      msg->xferFields, msg->sendCount, CkDeviceBuffer(locDom->commDataSendView.data() + msg->offset, commStream));
+      msg->xferFields, msg->sendCount, CkDeviceBuffer(locDom->commDataSendView.data() + msg->offset, *cb, commStream));
 }
 
 /******************************************/
