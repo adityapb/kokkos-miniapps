@@ -75,6 +75,10 @@ public:
 
   void CommRecv(uint32_t ref, int x, int y, int z, int xferFields, int& size, Real_t* &buf, CkDeviceBufferPost* post);
 
+  // void PosVelSendDone();
+  // void MonoQSendDone();
+  // void SBNSendDone();
+
   void packingDone(PackingDoneMsg* msg);
 
   void processRemotePosVel(uint32_t ref, int x, int y, int z, int xferFields, 
