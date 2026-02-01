@@ -28,7 +28,7 @@ mainmodule lulesh {
                 }
             }
 
-            while finalizeDone() {
+            when finalizeDone() {
                 serial {
                     CkExit();
                 }
