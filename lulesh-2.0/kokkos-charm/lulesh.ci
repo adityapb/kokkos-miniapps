@@ -38,7 +38,12 @@ mainmodule lulesh {
 
     group KokkosManager {
         entry KokkosManager();
-        entry void finalize();
+        
+        entry void finalize() {
+            Kokkos::finalize();
+            CkCallback cb(CkReductionTarget(Main, finalizeDone), mainProxy);
+            contribute(cb);
+        };
     };
 
     array [3D] DomainChare {
