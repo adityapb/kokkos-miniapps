@@ -549,7 +549,7 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       else if (msgType == MSG_MONOQ) {
          thisProxy[thisIndex].MonoQSendDone();
       }
-      else if (msgType == MSG_SBN) {
+      else if (msgType == MSG_COMM_SBN) {
          thisProxy[thisIndex].SBNSendDone();
       }
    }
