@@ -89,7 +89,7 @@ mainmodule lulesh {
             int size, nocopydevice Real_t buf[size]);
 
         entry void PosVelSendDone();
-        entry void MonoQSendDone();
+        //entry void MonoQSendDone();
         entry void SBNSendDone();
 
         entry void run() {
@@ -199,7 +199,7 @@ mainmodule lulesh {
             when PosVelSendDone() {
                 serial {
                     Domain &domain = *locDom;
-                    
+
                     Kokkos::View<Real_t*> fieldData[3];
                     fieldData[0] = domain.m_delv_xi;
                     fieldData[1] = domain.m_delv_eta;
