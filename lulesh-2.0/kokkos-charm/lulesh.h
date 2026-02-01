@@ -12,6 +12,10 @@
 #include "lulesh.decl.h"
 #include "hapi.h"
 
+/* readonly */ CProxy_Main mainProxy;
+/* readonly */ CProxy_KokkosManager kokkosProxy;
+/* readonly */ CProxy_DomainChare domainProxy;
+
 struct TupleHash {
     template <class T1, class T2, class T3>
     std::size_t operator()(const std::tuple<T1, T2, T3>& v) const {
@@ -29,8 +33,6 @@ using CommDataMap_t = std::unordered_map<std::tuple<int, int, int>, CommData, Tu
 using CommDataMapIter_t = CommDataMap_t::iterator;
 
 class KokkosManager : public CBase_KokkosManager {
-  KokkosManager_SDAG_CODE
-  
 public:
   KokkosManager() : CBase_KokkosManager() {
     Kokkos::initialize();
@@ -42,6 +44,12 @@ public:
 
   ~KokkosManager() {
     Kokkos::finalize();
+  }
+
+  void finalize() {
+    Kokkos::finalize();
+    CkCallback cb(CkReductionTarget(Main, finalizeDone), mainProxy);
+    contribute(cb);
   }
 };
 

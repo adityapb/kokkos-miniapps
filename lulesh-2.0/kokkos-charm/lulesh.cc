@@ -13,10 +13,6 @@
 
 #include "lulesh.h"
 
-/* readonly */ CProxy_Main mainProxy;
-/* readonly */ CProxy_KokkosManager kokkosProxy;
-/* readonly */ CProxy_DomainChare domainProxy;
-
 static Kokkos::View<Real_t*> buffer;
 static size_t buffer_size;
 static size_t buffer_offset;
