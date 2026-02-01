@@ -1999,6 +1999,9 @@ DomainChare::DomainChare(int numRanks, Index_t nx_, int nr_,
   numChares = numChares_;
 
   iter = 0;
+  posVelSendsDone = 0;
+  monoQSendsDone = 0;
+  sbnSendsDone = 0;
   opts.its = its_;
   opts.nx = nx_;
   opts.numReg = nr_;

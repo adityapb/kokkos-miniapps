@@ -589,19 +589,46 @@ void DomainChare::CommSend(Domain& domain, int msgType,
       hapiAddCallback(commStream, cb, msg);
    }
 }
+
+void DomainChare::PosVelSendCallback() {
+   if (++posVelSendsDone == commDataSendPosVel.size()) {
+      //CkPrintf("DomainChare::PosVelSendCallback: All pos/vel sends done for iter %d on (%d,%d,%d)\n", 
+      //   iter, thisIndex.x, thisIndex.y, thisIndex.z);
+      thisProxy[thisIndex].PosVelRecvDone();
+      posVelSendsDone = 0 ;
+   }
+}
+
+void DomainChare::MonoQSendCallback() {
+   if (++monoQSendsDone == commDataSendMonoQ.size()) {
+      //CkPrintf("DomainChare::MonoQSendCallback: All MonoQ sends done for iter %d on (%d,%d,%d)\n", 
+      //   iter, thisIndex.x, thisIndex.y, thisIndex.z);
+      thisProxy[thisIndex].MonoQRecvDone();
+      monoQSendsDone = 0 ;
+   }
+}
+
+void DomainChare::SBNSendCallback() {
+   if (++sbnSendsDone == commDataSendSBN.size()) {
+      //CkPrintf("DomainChare::SBNSendCallback: All SBN sends done for iter %d on (%d,%d,%d)\n", 
+      //   iter, thisIndex.x, thisIndex.y, thisIndex.z);
+      thisProxy[thisIndex].SBNRecvDone();
+      sbnSendsDone = 0 ;
+   }
+}
    
 void DomainChare::packingDone(PackingDoneMsg* msg) {
    uint32_t ref = msg->msgType | iter;
    CkCallback* cb;
 
    if (msg->msgType == MSG_SYNC_POS_VEL) {
-      cb = new CkCallback(CkIndex_DomainChare::PosVelSendDone(), thisProxy[thisIndex]);
+      cb = new CkCallback(CkIndex_DomainChare::PosVelSendCallback(), thisProxy[thisIndex]);
    }
    else if (msg->msgType == MSG_MONOQ) {
-      cb = new CkCallback(CkIndex_DomainChare::MonoQSendDone(), thisProxy[thisIndex]);
+      cb = new CkCallback(CkIndex_DomainChare::MonoQSendCallback(), thisProxy[thisIndex]);
    }
    else if (msg->msgType == MSG_COMM_SBN) {
-      cb = new CkCallback(CkIndex_DomainChare::SBNSendDone(), thisProxy[thisIndex]);
+      cb = new CkCallback(CkIndex_DomainChare::SBNSendCallback(), thisProxy[thisIndex]);
    }
    else
       CkAbort("DomainChare::packingDone: Unknown msgType") ;

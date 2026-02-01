@@ -92,6 +92,10 @@ mainmodule lulesh {
         entry void MonoQSendDone();
         entry void SBNSendDone();
 
+        entry void PosVelSendCallback();
+        entry void MonoQSendCallback();
+        entry void SBNSendCallback();
+
         entry void run() {
             serial "TimeStepCalculation" {
                 if ((opts.showProg != 0) && (opts.quiet == 0) && (flatIndex == 0)) {

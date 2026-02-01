@@ -79,6 +79,10 @@ public:
   // void MonoQSendDone();
   // void SBNSendDone();
 
+  void PosVelSendCallback();
+  void MonoQSendCallback();
+  void SBNSendCallback();
+
   void packingDone(PackingDoneMsg* msg);
 
   void processRemotePosVel(uint32_t ref, int x, int y, int z, int xferFields, 
@@ -97,6 +101,10 @@ public:
   int numChares;
   uint32_t recvRef;
   struct cmdLineOpts opts;
+
+  int posVelSendsDone ;
+  int monoQSendsDone ;
+  int sbnSendsDone ;
 
   CommDataMap_t commDataSendPosVel;
   CommDataMap_t commDataSendMonoQ;
