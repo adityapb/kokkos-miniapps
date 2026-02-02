@@ -816,7 +816,6 @@ void DomainChare::processRemoteQ(uint32_t ref, int x, int y, int z, int xferFiel
             domain.commDataRecvView, 
             offset + fi * cdata.size[0],
             1,
-            dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0], 1,
             cdata.size[0], commSpace
             );
          //fieldOffset[fi] += cdata.size[0];
