@@ -608,8 +608,8 @@ void DomainChare::CommSend(Domain& domain, int msgType,
 
 void DomainChare::PosVelSendCallback() {
    if (++posVelSendsDone == commDataSendPosVel.size()) {
-      //CkPrintf("DomainChare::PosVelSendCallback: All pos/vel sends done for iter %d on (%d,%d,%d)\n", 
-      //   iter, thisIndex.x, thisIndex.y, thisIndex.z);
+      CkPrintf("DomainChare::PosVelSendCallback: pos/vel send done for iter %d on (%d,%d,%d)\n", 
+         iter, thisIndex.x, thisIndex.y, thisIndex.z);
       thisProxy[thisIndex].PosVelSendDone();
       posVelSendsDone = 0 ;
    }
@@ -617,8 +617,8 @@ void DomainChare::PosVelSendCallback() {
 
 void DomainChare::MonoQSendCallback() {
    if (++monoQSendsDone == commDataSendMonoQ.size()) {
-      //CkPrintf("DomainChare::MonoQSendCallback: All MonoQ sends done for iter %d on (%d,%d,%d)\n", 
-      //   iter, thisIndex.x, thisIndex.y, thisIndex.z);
+      CkPrintf("DomainChare::MonoQSendCallback: MonoQ send done for iter %d on (%d,%d,%d)\n", 
+         iter, thisIndex.x, thisIndex.y, thisIndex.z);
       thisProxy[thisIndex].MonoQSendDone();
       monoQSendsDone = 0 ;
    }
@@ -626,8 +626,8 @@ void DomainChare::MonoQSendCallback() {
 
 void DomainChare::SBNSendCallback() {
    if (++sbnSendsDone == commDataSendSBN.size()) {
-      //CkPrintf("DomainChare::SBNSendCallback: All SBN sends done for iter %d on (%d,%d,%d)\n", 
-      //   iter, thisIndex.x, thisIndex.y, thisIndex.z);
+      CkPrintf("DomainChare::SBNSendCallback: SBN send done for iter %d on (%d,%d,%d)\n", 
+         iter, thisIndex.x, thisIndex.y, thisIndex.z);
       thisProxy[thisIndex].SBNSendDone();
       sbnSendsDone = 0 ;
    }
