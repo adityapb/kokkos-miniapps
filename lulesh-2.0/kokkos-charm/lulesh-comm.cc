@@ -630,7 +630,7 @@ void DomainChare::MonoQSendCallback() {
 
 void DomainChare::SBNSendCallback() {
    CkPrintf("DomainChare::SBNSendCallback: SBNSendCallback called for iter %d on (%d,%d,%d). sends done = %d, total=%d\n", 
-      iter, thisIndex.x, thisIndex.y, thisIndex.z, sbnSendsDone, commDataSendSBN.size());
+      iter, thisIndex.x, thisIndex.y, thisIndex.z, sbnSendsDone+1, commDataSendSBN.size());
    if (++sbnSendsDone == commDataSendSBN.size()) {
       CkPrintf("DomainChare::SBNSendCallback: SBN send done for iter %d on (%d,%d,%d)\n", 
          iter, thisIndex.x, thisIndex.y, thisIndex.z);
