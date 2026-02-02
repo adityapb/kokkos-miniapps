@@ -86,6 +86,7 @@ mainmodule lulesh {
             
             when SBNSendDone() {
                 serial {
+                    CkPrintf("(%d, %d, %d) Initialization done\n", thisIndex.x, thisIndex.y, thisIndex.z);
                     CkCallback cb(CkIndex_Main::initDone(), mainProxy);
                     contribute(cb);
                 }
