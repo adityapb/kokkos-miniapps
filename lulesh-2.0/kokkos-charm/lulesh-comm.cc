@@ -735,12 +735,12 @@ void DomainChare::processRemotePosVel(uint32_t ref, int x, int y, int z, int xfe
          //    dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
          //    cdata.size[0], cdata.size[1], commSpace
          //    );
-         Copy2D(dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-               domain.commDataRecvView, 
-               offset + fi * cdata.size[0] * cdata.size[1],
-               1, cdata.size[0],
-               cdata.size[0], cdata.size[1], commSpace
-               );
+         // Copy2D(dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
+         //       domain.commDataRecvView, 
+         //       offset + fi * cdata.size[0] * cdata.size[1],
+         //       1, cdata.size[0],
+         //       cdata.size[0], cdata.size[1], commSpace
+         //       );
       }
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
@@ -751,12 +751,12 @@ void DomainChare::processRemotePosVel(uint32_t ref, int x, int y, int z, int xfe
          //    dest, cdata.offset, cdata.dst_stride[0],
          //    cdata.size[0], commSpace
          //    );
-         Copy1D(dest, cdata.offset, cdata.dst_stride[0],
-               domain.commDataRecvView, 
-               offset + fi * cdata.size[0],
-               1,
-               cdata.size[0], commSpace
-               );
+         // Copy1D(dest, cdata.offset, cdata.dst_stride[0],
+         //       domain.commDataRecvView, 
+         //       offset + fi * cdata.size[0],
+         //       1,
+         //       cdata.size[0], commSpace
+         //       );
       }
    }
 }
@@ -800,12 +800,12 @@ void DomainChare::processRemoteQ(uint32_t ref, int x, int y, int z, int xferFiel
          //    dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0] * cdata.size[1], 1,
          //    cdata.size[0] * cdata.size[1], commSpace
          //    );
-         Copy1D(dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0] * cdata.size[1], 1,
-            domain.commDataRecvView, 
-            offset + fi * cdata.size[0] * cdata.size[1],
-            1,
-            cdata.size[0] * cdata.size[1], commSpace
-            );
+         // Copy1D(dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0] * cdata.size[1], 1,
+         //    domain.commDataRecvView, 
+         //    offset + fi * cdata.size[0] * cdata.size[1],
+         //    1,
+         //    cdata.size[0] * cdata.size[1], commSpace
+         //    );
          //fieldOffset[fi] += cdata.size[0] * cdata.size[1];
       }
    } else {
@@ -819,12 +819,12 @@ void DomainChare::processRemoteQ(uint32_t ref, int x, int y, int z, int xferFiel
          //    dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0], 1,
          //    cdata.size[0], commSpace
          //    );
-         Copy1D(dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0], 1,
-            domain.commDataRecvView, 
-            offset + fi * cdata.size[0],
-            1,
-            cdata.size[0], commSpace
-            );
+         // Copy1D(dest, fieldOffset[fi] + cdata.pmsg * cdata.size[0], 1,
+         //    domain.commDataRecvView, 
+         //    offset + fi * cdata.size[0],
+         //    1,
+         //    cdata.size[0], commSpace
+         //    );
          //fieldOffset[fi] += cdata.size[0];
       }
    }
@@ -915,11 +915,11 @@ void DomainChare::processRemoteForce(uint32_t ref, int x, int y, int z, int xfer
          //       cdata.src_stride[0], cdata.src_stride[1],
          //       dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
          //       cdata.size[0], cdata.size[1], commSpace);
-         Add2D(dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-               domain.commDataRecvView, 
-               offset + fi * cdata.size[0] * cdata.size[1],
-               cdata.src_stride[0], cdata.src_stride[1],
-               cdata.size[0], cdata.size[1], commSpace);
+         // Add2D(dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
+         //       domain.commDataRecvView, 
+         //       offset + fi * cdata.size[0] * cdata.size[1],
+         //       cdata.src_stride[0], cdata.src_stride[1],
+         //       cdata.size[0], cdata.size[1], commSpace);
       }
    } else {
       for (Index_t fi=0 ; fi<xferFields; ++fi) {
@@ -928,11 +928,11 @@ void DomainChare::processRemoteForce(uint32_t ref, int x, int y, int z, int xfer
          //       cdata.src_stride[0],
          //       dest, cdata.offset, cdata.dst_stride[0],
          //       cdata.size[0], commSpace);
-         Add1D(dest, cdata.offset, cdata.dst_stride[0],
-               domain.commDataRecvView, 
-               offset + fi * cdata.size[0],
-               cdata.src_stride[0],
-               cdata.size[0], commSpace);
+         // Add1D(dest, cdata.offset, cdata.dst_stride[0],
+         //       domain.commDataRecvView, 
+         //       offset + fi * cdata.size[0],
+         //       cdata.src_stride[0],
+         //       cdata.size[0], commSpace);
       }
    }
    commSpace.fence();
