@@ -636,7 +636,7 @@ void DomainChare::SBNSendCallback() {
 void DomainChare::packingDone(PackingDoneMsg* msg) {
    uint32_t ref = msg->msgType | iter;
    CkCallback* cb;
-   CkArrayIndex1D myIndex = CkArrayIndex1D(thisIndex);
+   CkArrayIndex3D myIndex = CkArrayIndex3D(thisIndex);
 
    if (msg->msgType == MSG_SYNC_POS_VEL) {
       cb = new CkCallback(CkIndex_DomainChare::PosVelSendCallback(), myIndex, thisArrayID);
