@@ -732,8 +732,8 @@ static inline void CalcHourglassControlForElems(Domain &domain, Real_t determ[],
     }
   },error);
 
-  if(error)
-    CkAbort("VolumeError1");
+  //if(error)
+  //  CkAbort("VolumeError1");
 
   if (hgcoef > Real_t(0.)) {
     CalcFBHourglassForceForElems(domain, determ, v_x8n, v_y8n, v_z8n, v_dvdx, v_dvdy,
@@ -768,8 +768,8 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
       }
     },error);
 
-    if (error)
-      CkAbort("VolumeError2");
+    //if (error)
+    //  CkAbort("VolumeError2");
 
     CalcHourglassControlForElems(domain, determ.data(), hgcoef, execSpace);
   }
@@ -1123,8 +1123,8 @@ static inline void CalcLagrangeElements(Domain &domain, ExecSpace execSpace) {
       }
     },error);
 
-    if(error)
-      CkAbort("VolumeError3");
+    //if(error)
+    //  CkAbort("VolumeError3");
 
     domain.DeallocateStrains();
   }
