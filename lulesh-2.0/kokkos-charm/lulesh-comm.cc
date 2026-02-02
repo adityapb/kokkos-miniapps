@@ -636,15 +636,16 @@ void DomainChare::SBNSendCallback() {
 void DomainChare::packingDone(PackingDoneMsg* msg) {
    uint32_t ref = msg->msgType | iter;
    CkCallback* cb;
+   CkArrayIndex1D myIndex = CkArrayIndex1D(thisIndex);
 
    if (msg->msgType == MSG_SYNC_POS_VEL) {
-      cb = new CkCallback(CkIndex_DomainChare::PosVelSendCallback(), thisProxy[thisIndex]);
+      cb = new CkCallback(CkIndex_DomainChare::PosVelSendCallback(), myIndex, thisArrayID);
    }
    else if (msg->msgType == MSG_MONOQ) {
-      cb = new CkCallback(CkIndex_DomainChare::MonoQSendCallback(), thisProxy[thisIndex]);
+      cb = new CkCallback(CkIndex_DomainChare::MonoQSendCallback(), myIndex, thisArrayID);
    }
    else if (msg->msgType == MSG_COMM_SBN) {
-      cb = new CkCallback(CkIndex_DomainChare::SBNSendCallback(), thisProxy[thisIndex]);
+      cb = new CkCallback(CkIndex_DomainChare::SBNSendCallback(), myIndex, thisArrayID);
    }
    else
       CkAbort("DomainChare::packingDone: Unknown msgType") ;
