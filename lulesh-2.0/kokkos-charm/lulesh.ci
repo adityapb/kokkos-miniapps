@@ -36,7 +36,7 @@ mainmodule lulesh {
         };
     };
 
-    group KokkosManager {
+    nodegroup KokkosManager {
         entry KokkosManager();
 
         entry void finalize();
