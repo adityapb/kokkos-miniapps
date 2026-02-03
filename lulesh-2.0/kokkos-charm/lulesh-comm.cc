@@ -649,10 +649,10 @@ void DomainChare::packingDone(PackingDoneMsg* msg) {
    CkArrayIndex3D myIndex = CkArrayIndex3D(thisIndex);
 
    if (msg->msgType == MSG_SYNC_POS_VEL) {
-      cb = new CkCallback(CkIndex_DomainChare::PosVelSendCallback(), myIndex, thisArrayID);
+      //cb = new CkCallback(CkIndex_DomainChare::PosVelSendCallback(), myIndex, thisArrayID);
    }
    else if (msg->msgType == MSG_MONOQ) {
-      cb = new CkCallback(CkIndex_DomainChare::MonoQSendCallback(), myIndex, thisArrayID);
+      //cb = new CkCallback(CkIndex_DomainChare::MonoQSendCallback(), myIndex, thisArrayID);
    }
    else if (msg->msgType == MSG_COMM_SBN) {
       cb = new CkCallback(CkIndex_DomainChare::SBNSendCallback(), myIndex, thisArrayID);
