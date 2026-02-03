@@ -598,6 +598,8 @@ void DomainChare::CommSend(Domain& domain, int msgType,
                    cdata.dst_stride[0], cdata.size[0], commSpace);
          }
       }
+
+      commSpace.fence();
       
       CkCallback* cb = new CkCallback(CkIndex_DomainChare::packingDone(NULL), thisProxy[thisIndex]);
       PackingDoneMsg* msg = new PackingDoneMsg(msgType,
