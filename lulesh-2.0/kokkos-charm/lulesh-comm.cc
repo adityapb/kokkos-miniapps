@@ -544,10 +544,10 @@ void DomainChare::CommSend(Domain& domain, int msgType,
 
    if (commDataMap.size() == 0) {
       if (msgType == MSG_SYNC_POS_VEL) {
-         thisProxy[thisIndex].PosVelSendDone();
+         //thisProxy[thisIndex].PosVelSendDone();
       }
       else if (msgType == MSG_MONOQ) {
-         thisProxy[thisIndex].MonoQSendDone();
+         //thisProxy[thisIndex].MonoQSendDone();
       }
       else if (msgType == MSG_COMM_SBN) {
          thisProxy[thisIndex].SBNSendDone();
