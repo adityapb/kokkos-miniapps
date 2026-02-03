@@ -570,7 +570,8 @@ void DomainChare::CommSend(Domain& domain, int msgType,
 
       if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
-         CkPrintf("Packing Kernel: Performing 1D copy to offset %d, src_stride %d %d, dst_stride %d %d, size %d %d\n", 
+         CkPrintf("(%d, %d, %d) Packing Kernel: Performing 1D copy to offset %d, src_stride %d %d, dst_stride %d %d, size %d %d\n", 
+            thisIndex.x, thisIndex.y, thisIndex.z,
             offset, cdata.src_stride[0], cdata.src_stride[1], cdata.dst_stride[0], cdata.dst_stride[1], cdata.size[0], cdata.size[1]);
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             //CkPrintf("2D copy offsetX=%d offsetY=%d offsetZ=%d\n", offsetX, offsetY, offsetZ);
