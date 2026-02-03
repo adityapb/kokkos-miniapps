@@ -570,9 +570,9 @@ void DomainChare::CommSend(Domain& domain, int msgType,
 
       if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
          offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
-         CkPrintf("(%d, %d, %d) Packing Kernel %d: Performing 2D copy to offset %d, src_stride %d %d, dst_stride %d %d, size %d %d\n", 
+         CkPrintf("(%d, %d, %d) Packing Kernel %d: Performing 2D copy to offset %d, src_stride %d %d, dst_stride %d %d, size %d %d, buffer size %lu\n", 
             thisIndex.x, thisIndex.y, thisIndex.z, msgType,
-            offset, cdata.src_stride[0], cdata.src_stride[1], cdata.dst_stride[0], cdata.dst_stride[1], cdata.size[0], cdata.size[1]);
+            offset, cdata.src_stride[0], cdata.src_stride[1], cdata.dst_stride[0], cdata.dst_stride[1], cdata.size[0], cdata.size[1], domain.commDataSendView.size());
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             //CkPrintf("2D copy offsetX=%d offsetY=%d offsetZ=%d\n", offsetX, offsetY, offsetZ);
             Kokkos::View<Real_t*> src = fieldData[fi] ;
@@ -587,9 +587,9 @@ void DomainChare::CommSend(Domain& domain, int msgType,
          //     commDataSendView size=%lu, send offset=%d\n", 
          //     offsetX, offsetY, offsetZ, cdata.offset, dx, dy, dz, domain.commDataSendView.size(), 
          //     offset);
-         CkPrintf("(%d, %d, %d) Packing Kernel %d: Performing 1D copy to offset %d, src_stride %d, dst_stride %d, size %d\n", 
+         CkPrintf("(%d, %d, %d) Packing Kernel %d: Performing 1D copy to offset %d, src_stride %d, dst_stride %d, size %d, buffer size %lu\n", 
             thisIndex.x, thisIndex.y, thisIndex.z, msgType,
-            offset, cdata.src_stride[0], cdata.dst_stride[0], cdata.size[0]);
+            offset, cdata.src_stride[0], cdata.dst_stride[0], cdata.size[0], domain.commDataSendView.size());
          for (Index_t fi=0 ; fi<xferFields; ++fi) {
             Kokkos::View<Real_t*> src = fieldData[fi] ;
             Copy1D(src, cdata.offset, cdata.src_stride[0],
