@@ -48,6 +48,8 @@ mainmodule lulesh {
             int its_, int viz_, int do_atomic_, 
             int numChares_);
 
+        entry [reductiontarget] void initDone();
+
         entry void init(int numRanks, Index_t nx, int nr,
                           int balance, int cost, int numChares_) {
             serial "NodalMassComm" {
@@ -66,13 +68,20 @@ mainmodule lulesh {
                 CommDataRecvInit(*locDom, locDom->sizeX(), locDom->sizeY(), 
                              locDom->sizeZ(), true, true, commDataRecvMonoQ);
 
-                Kokkos::View<Real_t*> fieldData[1];
-                fieldData[0] = locDom->m_nodalMass;
-                CommSend(*locDom, MSG_COMM_SBN, 1, fieldData, locDom->sizeX() + 1,
-                         locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSendSBN);
+                CkCallback cb(CkIndex_DomainChare::initDone(), thisProxy);
+                contribute(cb);
+            }
 
-                recvRef = MSG_COMM_SBN | iter;
-                commNbrs = commDataRecvSBN.size();
+            when initDone() {
+                serial {
+                    Kokkos::View<Real_t*> fieldData[1];
+                    fieldData[0] = locDom->m_nodalMass;
+                    CommSend(*locDom, MSG_COMM_SBN, 1, fieldData, locDom->sizeX() + 1,
+                            locDom->sizeY() + 1, locDom->sizeZ() + 1, true, false, commDataSendSBN);
+
+                    recvRef = MSG_COMM_SBN | iter;
+                    commNbrs = commDataRecvSBN.size();
+                }
             }
 
             for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
