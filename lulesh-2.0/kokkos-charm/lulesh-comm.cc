@@ -857,40 +857,40 @@ void DomainChare::processRemoteMass(uint32_t ref, int x, int y, int z, int xferF
    CkPrintf("processRemoteMass: ref=%d from (%d,%d,%d) to (%d,%d,%d) xferFields=%d size=%d\n", 
       ref, x, y, z, thisIndex.x, thisIndex.y, thisIndex.z, xferFields, size);
 
-   if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
-         offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
-      for (Index_t fi=0 ; fi<xferFields; ++fi) {
-         Kokkos::View<Real_t*> dest = fieldData[fi] ;
-         // CkPrintf("[DBG] processRemoteMass: 2D Add offset=%d size0=%d size1=%d, src_stride=%d %d, dst_stride=%d %d, dest_size=%d\n", 
-         //    offset + fi * cdata.size[0] * cdata.size[1],
-         //    cdata.size[0], cdata.size[1], cdata.src_stride[0], cdata.src_stride[1], 
-         //    cdata.dst_stride[0], cdata.dst_stride[1], dest.size());
-         Add2D(domain.commDataRecvView, 
-               offset + fi * cdata.size[0] * cdata.size[1],
-               1, cdata.size[0],
-               dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-               cdata.size[0], cdata.size[1], commSpace);
-         // Add2D(dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
-         //       domain.commDataRecvView, 
-         //       offset + fi * cdata.size[0] * cdata.size[1],
-         //       cdata.src_stride[0], cdata.src_stride[1],
-         //       cdata.size[0], cdata.size[1], commSpace);
-      }
-   } else {
-      for (Index_t fi=0 ; fi<xferFields; ++fi) {
-         Kokkos::View<Real_t*> dest = fieldData[fi] ;
-         Add1D(domain.commDataRecvView, 
-               offset + fi * cdata.size[0],
-               1,
-               dest, cdata.offset, cdata.dst_stride[0],
-               cdata.size[0], commSpace);
-         // Add1D(dest, cdata.offset, cdata.dst_stride[0],
-         //       domain.commDataRecvView, 
-         //       offset + fi * cdata.size[0],
-         //       cdata.src_stride[0],
-         //       cdata.size[0], commSpace);
-      }
-   }
+   // if (((offsetX == -1 || offsetX == 1) && offsetY == 0 && offsetZ == 0) || 
+   //       offsetX == 0 && ((offsetY == -1 || offsetY == 1) && offsetZ == 0)) {
+   //    for (Index_t fi=0 ; fi<xferFields; ++fi) {
+   //       Kokkos::View<Real_t*> dest = fieldData[fi] ;
+   //       // CkPrintf("[DBG] processRemoteMass: 2D Add offset=%d size0=%d size1=%d, src_stride=%d %d, dst_stride=%d %d, dest_size=%d\n", 
+   //       //    offset + fi * cdata.size[0] * cdata.size[1],
+   //       //    cdata.size[0], cdata.size[1], cdata.src_stride[0], cdata.src_stride[1], 
+   //       //    cdata.dst_stride[0], cdata.dst_stride[1], dest.size());
+   //       Add2D(domain.commDataRecvView, 
+   //             offset + fi * cdata.size[0] * cdata.size[1],
+   //             1, cdata.size[0],
+   //             dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
+   //             cdata.size[0], cdata.size[1], commSpace);
+   //       // Add2D(dest, cdata.offset, cdata.dst_stride[0], cdata.dst_stride[1],
+   //       //       domain.commDataRecvView, 
+   //       //       offset + fi * cdata.size[0] * cdata.size[1],
+   //       //       cdata.src_stride[0], cdata.src_stride[1],
+   //       //       cdata.size[0], cdata.size[1], commSpace);
+   //    }
+   // } else {
+   //    for (Index_t fi=0 ; fi<xferFields; ++fi) {
+   //       Kokkos::View<Real_t*> dest = fieldData[fi] ;
+   //       Add1D(domain.commDataRecvView, 
+   //             offset + fi * cdata.size[0],
+   //             1,
+   //             dest, cdata.offset, cdata.dst_stride[0],
+   //             cdata.size[0], commSpace);
+   //       // Add1D(dest, cdata.offset, cdata.dst_stride[0],
+   //       //       domain.commDataRecvView, 
+   //       //       offset + fi * cdata.size[0],
+   //       //       cdata.src_stride[0],
+   //       //       cdata.size[0], commSpace);
+   //    }
+   // }
    commSpace.fence();
 }
 
