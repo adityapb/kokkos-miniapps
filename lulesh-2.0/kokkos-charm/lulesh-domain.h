@@ -97,7 +97,7 @@ KOKKOS_INLINE_FUNCTION real10 FABS(real10 arg) { return fabsl(arg); }
 
 // Assume 128 byte coherence
 // Assume Real_t is an "integral power of 2" bytes wide
-#define CACHE_COHERENCE_PAD_REAL (128 / sizeof(Real_t))
+#define CACHE_COHERENCE_PAD_REAL 1 //(128 / sizeof(Real_t))
 
 #define CACHE_ALIGN_REAL(n)                                                    \
   (((n) + (CACHE_COHERENCE_PAD_REAL - 1)) & ~(CACHE_COHERENCE_PAD_REAL - 1))
