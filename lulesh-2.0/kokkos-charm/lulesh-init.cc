@@ -461,7 +461,7 @@ Domain::SetupCommBuffers(Int_t edgeNodes)
 		 (m_rowMax & m_colMin & m_planeMin) +
 		 (m_rowMax & m_colMin & m_planeMax) +
 		 (m_rowMax & m_colMax & m_planeMin) +
-		 (m_rowMax & m_colMax & m_planeMax)) * CACHE_COHERENCE_PAD_REAL ;
+		 (m_rowMax & m_colMax & m_planeMax)) * MAX_FIELDS_PER_MPI_COMM * CACHE_COHERENCE_PAD_REAL ;
 
   //this->commDataSend = Allocate<Real_t>(comBufSize) ;
   //this->commDataRecv = Allocate<Real_t>(comBufSize) ;
@@ -817,9 +817,9 @@ void InitMeshDecomp(Int_t numRanks, Int_t myRank,
    if (sizeof(Real_t) != 4 && sizeof(Real_t) != 8) {
       CkAbort("MPI operations only support float and double right now...\n") ;
    }
-   if (MAX_FIELDS_PER_MPI_COMM > CACHE_COHERENCE_PAD_REAL) {
-      CkAbort("corner element comm buffers too small.  Fix code.\n") ;
-   }
+   //if (MAX_FIELDS_PER_MPI_COMM > CACHE_COHERENCE_PAD_REAL) {
+   //   CkAbort("corner element comm buffers too small.  Fix code.\n") ;
+   //}
 
    dx = testProcs ;
    dy = testProcs ;
