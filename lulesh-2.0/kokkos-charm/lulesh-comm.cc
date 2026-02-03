@@ -610,27 +610,27 @@ void DomainChare::CommSend(Domain& domain, int msgType,
    }
 }
 
-void DomainChare::PosVelSendCallback() {
-   CkPrintf("DomainChare::PosVelSendCallback: PosVelSendCallback called for iter %d on (%d,%d,%d)\n", 
-      iter, thisIndex.x, thisIndex.y, thisIndex.z);
-   if (++posVelSendsDone == commDataSendPosVel.size()) {
-      CkPrintf("DomainChare::PosVelSendCallback: pos/vel send done for iter %d on (%d,%d,%d)\n", 
-         iter, thisIndex.x, thisIndex.y, thisIndex.z);
-      thisProxy[thisIndex].PosVelSendDone();
-      posVelSendsDone = 0 ;
-   }
-}
+// void DomainChare::PosVelSendCallback() {
+//    CkPrintf("DomainChare::PosVelSendCallback: PosVelSendCallback called for iter %d on (%d,%d,%d)\n", 
+//       iter, thisIndex.x, thisIndex.y, thisIndex.z);
+//    if (++posVelSendsDone == commDataSendPosVel.size()) {
+//       CkPrintf("DomainChare::PosVelSendCallback: pos/vel send done for iter %d on (%d,%d,%d)\n", 
+//          iter, thisIndex.x, thisIndex.y, thisIndex.z);
+//       thisProxy[thisIndex].PosVelSendDone();
+//       posVelSendsDone = 0 ;
+//    }
+// }
 
-void DomainChare::MonoQSendCallback() {
-   CkPrintf("DomainChare::MonoQSendCallback: MonoQSendCallback called for iter %d on (%d,%d,%d)\n", 
-      iter, thisIndex.x, thisIndex.y, thisIndex.z);
-   if (++monoQSendsDone == commDataSendMonoQ.size()) {
-      CkPrintf("DomainChare::MonoQSendCallback: MonoQ send done for iter %d on (%d,%d,%d)\n", 
-         iter, thisIndex.x, thisIndex.y, thisIndex.z);
-      thisProxy[thisIndex].MonoQSendDone();
-      monoQSendsDone = 0 ;
-   }
-}
+// void DomainChare::MonoQSendCallback() {
+//    CkPrintf("DomainChare::MonoQSendCallback: MonoQSendCallback called for iter %d on (%d,%d,%d)\n", 
+//       iter, thisIndex.x, thisIndex.y, thisIndex.z);
+//    if (++monoQSendsDone == commDataSendMonoQ.size()) {
+//       CkPrintf("DomainChare::MonoQSendCallback: MonoQ send done for iter %d on (%d,%d,%d)\n", 
+//          iter, thisIndex.x, thisIndex.y, thisIndex.z);
+//       thisProxy[thisIndex].MonoQSendDone();
+//       monoQSendsDone = 0 ;
+//    }
+// }
 
 void DomainChare::SBNSendCallback() {
    CkPrintf("DomainChare::SBNSendCallback: SBNSendCallback called for iter %d on (%d,%d,%d). sends done = %d, total=%d\n", 
