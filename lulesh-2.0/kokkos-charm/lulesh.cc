@@ -747,23 +747,22 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
   Index_t numElem = domain.numElem();
   if (numElem != 0) {
     Real_t hgcoef = domain.hgcoef();
-    Kokkos::View<Real_t*> sigxx(Kokkos::view_alloc(execSpace, "sigxx"), numElem);
-    Kokkos::View<Real_t*> sigyy(Kokkos::view_alloc(execSpace, "sigyy"), numElem);
-    Kokkos::View<Real_t*> sigzz(Kokkos::view_alloc(execSpace, "sigzz"), numElem);
-    Kokkos::View<Real_t*> determ(Kokkos::view_alloc(execSpace, "determ"), numElem);
+    Real_t *sigxx = Allocate<Real_t>(numElem);
+    Real_t *sigyy = Allocate<Real_t>(numElem);
+    Real_t *sigzz = Allocate<Real_t>(numElem);
+    Real_t *determ = Allocate<Real_t>(numElem);
     execSpace.fence();
     CkPrintf("First fence in CalcVolumeForceForElems\n");
 
-    InitStressTermsForElems(domain, sigxx.data(), sigyy.data(), sigzz.data(), numElem, execSpace);
+    InitStressTermsForElems(domain, sigxx, sigyy, sigzz, numElem, execSpace);
 
-    IntegrateStressForElems(domain, sigxx.data(), sigyy.data(), sigzz.data(), determ.data(), numElem,
+    IntegrateStressForElems(domain, sigxx, sigyy, sigzz, determ, numElem,
                             domain.numNode(), execSpace);
 
     // check for negative element volume
     int error = 0;
-    Real_t* determ_ptr = determ.data();
     Kokkos::parallel_reduce(RangePolicy(execSpace, 0, numElem), KOKKOS_LAMBDA(const int k, int &err) {
-      if (determ_ptr[k] <= Real_t(0.0)) {
+      if (determ[k] <= Real_t(0.0)) {
         err++;
       }
     },error);
@@ -771,7 +770,7 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
     //if (error)
     //  CkAbort("VolumeError2");
 
-    CalcHourglassControlForElems(domain, determ.data(), hgcoef, execSpace);
+    CalcHourglassControlForElems(domain, determ, hgcoef, execSpace);
   }
 }
 
