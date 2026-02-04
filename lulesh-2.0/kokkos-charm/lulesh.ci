@@ -143,7 +143,7 @@ mainmodule lulesh {
                 Domain& domain = *locDom;
                 CalcForceForNodes(domain, computeSpace);
 
-                /*Kokkos::View<Real_t*> fieldData[3];
+                Kokkos::View<Real_t*> fieldData[3];
                 fieldData[0] = domain.m_fx;
                 fieldData[1] = domain.m_fy;
                 fieldData[2] = domain.m_fz;
@@ -152,10 +152,10 @@ mainmodule lulesh {
                 
                 recvRef = MSG_COMM_SBN | iter;
                 commNbrs = commDataRecvSBN.size();
-                CkPrintf("SBN num nbrs = %d\n", commNbrs);*/
+                CkPrintf("SBN num nbrs = %d\n", commNbrs);
             }
 
-            /*for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
+            for (remoteCount = 0; remoteCount < commNbrs; remoteCount++) {
                 when CommRecv[recvRef](uint32_t ref, int x, int y, int z, int xferFields, 
                         int size, nocopydevice Real_t buf[size]) {
                     serial "processRemoteForce" {
@@ -283,7 +283,7 @@ mainmodule lulesh {
                         contribute(cb);
                     }
                 }
-            }*/
+            }
         };
     };
 };
