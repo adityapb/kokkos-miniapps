@@ -817,9 +817,20 @@ template <typename T> T *Allocate(size_t size) {
   return static_cast<T *>(Kokkos::kokkos_malloc<Kokkos::DefaultExecutionSpace::memory_space>(sizeof(T) * size + 8));
 }
 
+template <typename T> T *AllocateHost(size_t size) {
+  return static_cast<T *>(Kokkos::kokkos_malloc<Kokkos::HostSpace>(sizeof(T) * size + 8));
+}
+
 template <typename T> void Release(T **ptr) {
   if (*ptr != NULL) {
     Kokkos::kokkos_free<Kokkos::DefaultExecutionSpace::memory_space>(*ptr);
+    *ptr = NULL;
+  }
+}
+
+template <typename T> void ReleaseHost(T **ptr) {
+  if (*ptr != NULL) {
+    Kokkos::kokkos_free<Kokkos::HostSpace>(*ptr);
     *ptr = NULL;
   }
 }

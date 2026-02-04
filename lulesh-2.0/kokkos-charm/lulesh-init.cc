@@ -493,7 +493,7 @@ Domain::CreateRegionIndexSets(Int_t nr, Int_t balance)
    srand(CkMyPe()); // FIXME
    Index_t myRank = 0;
    this->numReg() = nr;
-   m_regElemSize = Allocate<Index_t>(numReg());
+   m_regElemSize = AllocateHost<Index_t>(numReg());
    auto row_map = Kokkos::View<Index_t*>("regElemlist::row_map",numReg()+1);
    auto h_row_map = Kokkos::create_mirror_view(row_map);
    auto entries = Kokkos::View<Index_t*>("regElemlist::entries",numElem());
