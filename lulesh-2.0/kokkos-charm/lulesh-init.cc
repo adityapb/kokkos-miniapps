@@ -160,7 +160,7 @@ Domain::Domain(Int_t numRanks, Index_t colLoc,
 
    m_numNode = edgeNodes*edgeNodes*edgeNodes ;
 
-   m_regNumList = Allocate<Index_t>(numElem()) ;  // material indexset
+   m_regNumList = AllocateHost<Index_t>(numElem()) ;  // material indexset
 
    // Elem-centered 
    AllocateElemPersistent(numElem()) ;
