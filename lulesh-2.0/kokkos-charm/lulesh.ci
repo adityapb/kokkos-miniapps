@@ -109,12 +109,12 @@ mainmodule lulesh {
         entry void CommRecv(uint32_t ref, int x, int y, int z, int xferFields, 
             int size, nocopydevice Real_t buf[size]);
 
-        //entry void PosVelSendDone();
-        //entry void MonoQSendDone();
+        entry void PosVelSendDone();
+        entry void MonoQSendDone();
         entry void SBNSendDone();
 
-        //entry void PosVelSendCallback();
-        //entry void MonoQSendCallback();
+        entry void PosVelSendCallback();
+        entry void MonoQSendCallback();
         entry void SBNSendCallback();
 
         entry void run() {
