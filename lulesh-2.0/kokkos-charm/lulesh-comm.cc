@@ -702,7 +702,7 @@ void DomainChare::CommRecv(uint32_t ref, int x, int y, int z, int xferFields, in
    int offset = pmsg * maxPlaneComm + emsg * maxEdgeComm + cmsg * CACHE_COHERENCE_PAD_REAL;
 
    buf = locDom->commDataRecvView.data() + offset;
-   //post[0].hapi_stream = commStream;
+   post[0].hapi_stream = commStream;
 }
 
 /******************************************/
