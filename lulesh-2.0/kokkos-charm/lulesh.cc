@@ -325,7 +325,7 @@ static inline void IntegrateStressForElems(Domain &domain, Real_t *sigxx,
                                            Real_t *determ, Index_t numElem,
                                            Index_t numNode, ExecSpace execSpace) {
   Index_t numElem8 = numElem * 8;
-  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*3, execSpace);
+  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*3);
   Real_t *fx_elem_ptr = AllocateFromBuffer<Real_t>(numElem8);
   Real_t *fy_elem_ptr = AllocateFromBuffer<Real_t>(numElem8);
   Real_t *fz_elem_ptr = AllocateFromBuffer<Real_t>(numElem8);
@@ -694,7 +694,7 @@ static inline void CalcHourglassControlForElems(Domain &domain, Real_t determ[],
                                                 Real_t hgcoef, ExecSpace execSpace) {
   Index_t numElem = domain.numElem();
   Index_t numElem8 = numElem * 8;
-  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*(do_atomic?6:9), execSpace);
+  ResizeBuffer((numElem8*sizeof(Real_t)+4096)*(do_atomic?6:9));
 
   Real_t *dvdx = AllocateFromBuffer<Real_t>(numElem8);
   Real_t *dvdy = AllocateFromBuffer<Real_t>(numElem8);
@@ -1676,7 +1676,7 @@ static inline void EvalEOSForElems(Domain &domain, Real_t *vnewc,
   Real_t emin = domain.emin();
   Real_t rho0 = domain.refdens();
 
-  ResizeBuffer((numElemReg*sizeof(Real_t)+4096)*16, execSpace);
+  ResizeBuffer((numElemReg*sizeof(Real_t)+4096)*16);
 
   Real_t *e_old = AllocateFromBuffer<Real_t>(numElemReg);
   Real_t *delvc = AllocateFromBuffer<Real_t>(numElemReg);
