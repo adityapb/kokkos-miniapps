@@ -661,7 +661,7 @@ void DomainChare::packingDone(PackingDoneMsg* msg) {
       CkAbort("DomainChare::packingDone: Unknown msgType") ;
 
    thisProxy(msg->x, msg->y, msg->z).CommRecv(ref, thisIndex.x, thisIndex.y, thisIndex.z, 
-      msg->xferFields, msg->sendCount, CkDeviceBuffer(locDom->commDataSendView.data() , *cb, commStream));
+      msg->xferFields, msg->sendCount, CkDeviceBuffer(locDom->commDataSendView.data() + msg->offset, *cb, commStream));
 }
 
 /******************************************/
