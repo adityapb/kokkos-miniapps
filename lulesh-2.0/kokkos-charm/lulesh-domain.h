@@ -814,7 +814,7 @@ void InitMeshDecomp(Int_t numRanks, Int_t myRank, Int_t *col, Int_t *row,
 /* better managed, as in luleshFT */
 
 template <typename T> T *Allocate(size_t size) {
-  return static_cast<T *>(Kokkos::kokkos_malloc<Kokkos::DefaultExecutionSpace::memory_space>(sizeof(T) * size + 8));
+  return static_cast<T *>(Kokkos::kokkos_malloc<Kokkos::DefaultExecutionSpace::memory_space>(sizeof(T) * size));
 }
 
 template <typename T> T *AllocateHost(size_t size) {
