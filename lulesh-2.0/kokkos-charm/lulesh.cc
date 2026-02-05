@@ -2012,7 +2012,7 @@ DomainChare::DomainChare(int numRanks, Index_t nx_, int nr_,
   opts.cost = cost_;
   opts.do_atomic = do_atomic_;
 
-  hapiCheck(cudaStreamCreateWithPriority(&commStream, cudaStreamNonBlocking, -1));
+  hapiCheck(cudaStreamCreateWithPriority(&commStream, cudaStreamDefault, -1));
   //hapiCheck(cudaStreamCreateWithPriority(&computeStream, cudaStreamNonBlocking, 0));
   computeStream = commStream;
 
