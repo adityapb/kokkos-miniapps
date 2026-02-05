@@ -17,7 +17,7 @@
 /* readonly */ CProxy_KokkosManager kokkosProxy;
 /* readonly */ CProxy_DomainChare domainProxy;
 
-static Kokkos::View<Real_t*> buffer;
+static Real_t* buffer;
 static size_t buffer_size;
 static size_t buffer_offset;
 static int do_atomic;
@@ -34,7 +34,7 @@ void ResizeBuffer(const size_t size) {
 template<class Type>
 Type* AllocateFromBuffer(const Index_t& count) {
   const Index_t offset = (count*sizeof(Type)+sizeof(Real_t)-1)/sizeof(Real_t);
-  Real_t* ptr = buffer.data() + buffer_offset;
+  Real_t* ptr = buffer + buffer_offset;
   buffer_offset += ((offset+511)/512)*512;
   return static_cast<Type*>(ptr);
 }
