@@ -137,7 +137,7 @@ static inline void InitStressTermsForElems(Domain &domain, Real_t *sigxx,
                                            Real_t *sigyy, Real_t *sigzz,
                                            Index_t numElem, ExecSpace execSpace) {
 
-  Kokkos::parallel_for("InitStressTermsForElems", RangePolicy(execSpace, 0, numElem),
+  Kokkos::parallel_for("InitStressTermsForElems", RangePolicy(0, numElem),
                        KOKKOS_LAMBDA(const Index_t &i) {
     sigxx[i] = sigyy[i] = sigzz[i] = -domain.p(i) - domain.q(i);
   });
@@ -334,7 +334,7 @@ static inline void IntegrateStressForElems(Domain &domain, Real_t *sigxx,
   Kokkos::View<Real_t*, Kokkos::MemoryTraits<Kokkos::Unmanaged>> fy_elem(fy_elem_ptr, numElem8);
   Kokkos::View<Real_t*, Kokkos::MemoryTraits<Kokkos::Unmanaged>> fz_elem(fz_elem_ptr, numElem8);
 
-  Kokkos::parallel_for("IntegrateStressForElems A", RangePolicy(execSpace, 0, numElem),
+  Kokkos::parallel_for("IntegrateStressForElems A", RangePolicy(0, numElem),
                        KOKKOS_LAMBDA(const int k) {
     const Index_t *const elemToNode = &domain.nodelist(k,0);
     Real_t B[3][8];
@@ -360,7 +360,7 @@ static inline void IntegrateStressForElems(Domain &domain, Real_t *sigxx,
   execSpace.fence();
   CkPrintf("First fence in IntegrateStressForElems\n");
 
-  Kokkos::parallel_for ("IntegrateStressForElems B",Kokkos::TeamPolicy<ExecSpace>(execSpace, (numNode+127)/128,team_size,2),
+  Kokkos::parallel_for ("IntegrateStressForElems B",Kokkos::TeamPolicy((numNode+127)/128,team_size,2),
         KOKKOS_LAMBDA (const typename Kokkos::TeamPolicy<ExecSpace>::member_type& team)
      {
        const Index_t gnode_begin = team.league_rank()*128;
@@ -761,7 +761,7 @@ static inline void CalcVolumeForceForElems(Domain &domain, ExecSpace execSpace) 
 
     // check for negative element volume
     int error = 0;
-    Kokkos::parallel_reduce(RangePolicy(execSpace, 0, numElem), KOKKOS_LAMBDA(const int k, int &err) {
+    Kokkos::parallel_reduce(RangePolicy(0, numElem), KOKKOS_LAMBDA(const int k, int &err) {
       if (determ[k] <= Real_t(0.0)) {
         err++;
       }
