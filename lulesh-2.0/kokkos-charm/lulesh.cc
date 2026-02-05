@@ -22,12 +22,12 @@ static size_t buffer_size;
 static size_t buffer_offset;
 static int do_atomic;
 
-void ResizeBuffer(const size_t size, ExecSpace execSpace) {
+void ResizeBuffer(const size_t size) {
   buffer_offset = 0;
   if(size/sizeof(Real_t)+1 > buffer_size) {
     buffer_size = size/sizeof(Real_t)+1;
-    buffer = Kokkos::View<Real_t*>(Kokkos::view_alloc(execSpace, "Buffer"),buffer_size);
-    execSpace.fence();  // Ensure buffer allocation completes on this stream
+    Release<Real_t>(&buffer);
+    buffer = Allocate<Real_t>(buffer_size);
   }
 }
 
